@@ -1,0 +1,6 @@
+.Approve { padding: 12px; color: #1f2c8c; }
+.Approve__list { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
+.Approve__item { display: flex; justify-content: space-between; gap: 12px; align-items: center; background: #fff; border: 2px solid #1f2c8c; border-radius: 18px; padding: 12px; box-shadow: 0 6px 16px rgba(31,44,140,0.12); }
+.Approve__meta { font-size: 14px; opacity: 0.9; }
+.Approve__actions { display: flex; gap: 8px; }
+

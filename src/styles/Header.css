@@ -1,0 +1,30 @@
+.Header { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; background: #e9f4ff; border-bottom: 0; position: sticky; top: 0; z-index: 10; }
+.Header__brand { cursor: pointer; }
+.Header__title {
+  font-weight: 800;
+  color: #1f2c8c;
+  letter-spacing: 0.5px;
+}
+.Header__nav { display: flex; gap: 10px; }
+.Header__link { color: #1f2c8c; text-decoration: none; font-weight: 700; background: #ffffff; border: 2px solid #1f2c8c; padding: 6px 10px; border-radius: 14px; box-shadow: 0 4px 10px rgba(31,44,140,0.12); }
+.Header__auth { display: flex; gap: 8px; align-items: center; }
+.Header__user { display: flex; gap: 8px; align-items: center; }
+.Header__welcome { color: #1f2c8c; font-weight: 600; }
+
+.btn {
+  background: #eaeff6;
+  border: 1px solid #1f2c8c;
+  color: #1f2c8c;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.btn-primary {
+  background: #1f2c8c;
+  color: white;
+  border: 1px solid #1f2c8c;
+}
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.Footer { padding: 16px 20px; text-align: center; color: #1f2c8c; background: #e9f4ff; border-top: 0; }
+

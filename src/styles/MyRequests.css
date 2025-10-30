@@ -1,0 +1,6 @@
+.MyRequests { padding: 12px; color: #1f2c8c; }
+.ReqList { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.ReqItem { display: flex; justify-content: space-between; align-items: center; gap: 12px; background: #fff; border: 2px solid #1f2c8c; border-radius: 18px; padding: 12px; box-shadow: 0 6px 16px rgba(31,44,140,0.12); }
+.ReqMeta { font-size: 14px; }
+.ReqActions { display: flex; gap: 8px; }
+

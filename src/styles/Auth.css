@@ -1,0 +1,11 @@
+.ModalBackdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.35); display: grid; place-items: center; z-index: 50; }
+.Modal { width: min(520px, 92vw); background: #ffffff; border: 2px solid #1f2c8c; border-radius: 12px; padding: 16px; position: relative; color: #1f2c8c; }
+.Modal__close { position: absolute; right: 10px; top: 6px; background: none; border: none; font-size: 22px; color: #1f2c8c; cursor: pointer; }
+.Tabs { display: flex; gap: 6px; margin-bottom: 12px; }
+.tab { flex: 1; padding: 8px; border-radius: 8px; border: 1px solid #1f2c8c; background: #e8f2ff; color: #1f2c8c; cursor: pointer; }
+.tab.active { background: #1f2c8c; color: white; }
+.AuthForm { display: grid; gap: 10px; }
+.AuthForm label { display: flex; flex-direction: column; gap: 6px; }
+.AuthForm input { padding: 10px; border: 1px solid #1f2c8c; border-radius: 8px; }
+.error { background: #fde4e4; border: 1px solid #b81f1f; color: #b81f1f; padding: 8px; border-radius: 8px; }
+
