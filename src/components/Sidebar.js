@@ -1,10 +1,14 @@
 import React from 'react';
 import '../styles/Layout.css';
+import logo from '../assets/logobijlessen.png';
 
 function Sidebar({ currentUser }) {
   return (
     <aside className="Sidebar">
-      <div className="Sidebar__brand">Bijles Engels</div>
+      <div className="Sidebar__brand">
+        <img src={logo} alt="Bijles Engels Logo" className="Sidebar__logo" />
+        <span>Bijles Engels</span>
+      </div>
       <nav className="Sidebar__nav">
         <a href="#/home" className="Sidebar__link">Home</a>
         <a href="#/register" className="Sidebar__link">Inschrijven</a>

@@ -1,11 +1,164 @@
-.ModalBackdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.35); display: grid; place-items: center; z-index: 50; }
-.Modal { width: min(520px, 92vw); background: #ffffff; border: 2px solid #1f2c8c; border-radius: 12px; padding: 16px; position: relative; color: #1f2c8c; }
-.Modal__close { position: absolute; right: 10px; top: 6px; background: none; border: none; font-size: 22px; color: #1f2c8c; cursor: pointer; }
-.Tabs { display: flex; gap: 6px; margin-bottom: 12px; }
-.tab { flex: 1; padding: 8px; border-radius: 8px; border: 1px solid #1f2c8c; background: #e8f2ff; color: #1f2c8c; cursor: pointer; }
-.tab.active { background: #1f2c8c; color: white; }
-.AuthForm { display: grid; gap: 10px; }
-.AuthForm label { display: flex; flex-direction: column; gap: 6px; }
-.AuthForm input { padding: 10px; border: 1px solid #1f2c8c; border-radius: 8px; }
-.error { background: #fde4e4; border: 1px solid #b81f1f; color: #b81f1f; padding: 8px; border-radius: 8px; }
+.ModalBackdrop { 
+  position: fixed; 
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5); 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+  animation: fadeIn 0.2s ease;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.Modal { 
+  width: 100%;
+  max-width: 500px;
+  background: var(--color-surface);
+  border-radius: var(--radius-lg); 
+  padding: 32px; 
+  position: relative; 
+  color: var(--color-text);
+  box-shadow: var(--shadow-xl);
+  animation: slideUp 0.3s ease;
+  max-height: 90vh;
+  overflow-y: auto;
+  margin: auto;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.Modal__close { 
+  position: absolute; 
+  right: 16px; 
+  top: 16px; 
+  background: var(--color-bg);
+  border: none; 
+  font-size: 24px; 
+  color: var(--color-text-light);
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.Modal__close:hover {
+  background: var(--color-error);
+  color: white;
+  transform: rotate(90deg);
+}
+
+.Tabs { 
+  display: flex; 
+  gap: 8px; 
+  margin-bottom: 24px;
+  background: var(--color-bg);
+  padding: 4px;
+  border-radius: var(--radius-md);
+}
+
+.tab { 
+  flex: 1; 
+  padding: 12px 16px; 
+  border-radius: var(--radius-sm); 
+  border: none;
+  background: transparent;
+  color: var(--color-text-light);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 15px;
+  transition: all 0.2s ease;
+}
+
+.tab.active { 
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  color: white;
+  box-shadow: var(--shadow-sm);
+}
+
+.AuthForm { 
+  display: grid; 
+  gap: 20px; 
+}
+
+.AuthForm label { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 8px; 
+}
+
+.AuthForm label span {
+  font-weight: 600;
+  color: var(--color-text);
+  font-size: 14px;
+}
+
+.AuthForm input { 
+  padding: 14px 16px; 
+  border: 2px solid rgba(99,102,241,0.2);
+  border-radius: var(--radius-md); 
+  font-size: 15px;
+  transition: all 0.2s ease;
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+.AuthForm input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(99,102,241,0.1);
+}
+
+.AuthForm input::placeholder {
+  color: var(--color-text-light);
+}
+
+.error { 
+  background: #fef2f2;
+  border: 2px solid var(--color-error);
+  color: var(--color-error);
+  padding: 12px 16px; 
+  border-radius: var(--radius-md);
+  font-weight: 500;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  animation: shake 0.3s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+.error::before {
+  content: '⚠️';
+  font-size: 18px;
+}
 

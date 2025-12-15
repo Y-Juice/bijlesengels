@@ -2,21 +2,36 @@ import React, { useEffect, useState } from 'react';
 import '../styles/Approve.css';
 import { getCurrentUserFromStorage, getRegistrations, updateRegistrationStatus } from '../services/storage';
 
-function Approve() {
+function Approve({ currentUser, onAuthChange }) {
   const [regs, setRegs] = useState([]);
 
   useEffect(() => {
-    const user = getCurrentUserFromStorage();
-    if (!user || user.role !== 'admin') {
-      window.location.hash = '#/home';
-      return;
+    async function load() {
+      // Use currentUser prop first, fallback to checking storage
+      let user = currentUser;
+      if (!user) {
+        user = await getCurrentUserFromStorage();
+        if (onAuthChange) {
+          onAuthChange(user);
+        }
+      }
+      
+      if (!user || user.role !== 'admin') {
+        window.location.hash = '#/home';
+        return;
+      }
+      const all = await getRegistrations();
+      setRegs((all || []).filter((r) => r.status === 'pending'));
     }
-    setRegs(getRegistrations().filter((r) => r.status === 'pending'));
-  }, []);
+    load();
+  }, [currentUser, onAuthChange]);
 
   const act = (id, status) => {
-    updateRegistrationStatus(id, status);
-    setRegs(getRegistrations().filter((r) => r.status === 'pending'));
+    (async () => {
+      await updateRegistrationStatus(id, status);
+      const all = await getRegistrations();
+      setRegs((all || []).filter((r) => r.status === 'pending'));
+    })();
   };
 
   return (

@@ -1,4 +1,82 @@
-.Admin { padding: 12px; color: #1f2c8c; }
-.Actions { margin-top: 16px; display: flex; justify-content: flex-end; }
-.hint { color: #4050a0; font-size: 14px; }
+.Admin { 
+  padding: 0;
+  color: var(--color-text);
+}
+
+.Admin h2 {
+  font-size: 2rem;
+  margin-bottom: 8px;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hint { 
+  color: var(--color-text-light); 
+  font-size: 14px;
+  background: rgba(99,102,241,0.05);
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  border-left: 4px solid var(--color-primary);
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+
+.Admin__controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding: 20px;
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.Admin__controls button {
+  padding: 10px 20px;
+  font-size: 14px;
+}
+
+.Actions { 
+  margin-top: 24px; 
+  display: flex; 
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 20px;
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.Admin__stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.Admin__stat {
+  background: var(--color-surface);
+  padding: 20px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  border-left: 4px solid var(--color-primary);
+}
+
+.Admin__stat h3 {
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  color: var(--color-text-light);
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.Admin__stat p {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin: 0;
+}
 

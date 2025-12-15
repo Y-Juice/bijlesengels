@@ -7,7 +7,6 @@ import Approve from './pages/Approve';
 import MyRequests from './pages/MyRequests';
 import EditRegistration from './pages/EditRegistration';
 import Header from './components/Header';
-import Sidebar from './components/Sidebar';
 import MobileNav from './components/MobileNav';
 import './styles/Layout.css';
 import { getCurrentUserFromStorage } from './services/storage';
@@ -41,17 +40,20 @@ function App() {
   }, []);
 
   useEffect(() => {
-    setCurrentUser(getCurrentUserFromStorage());
+    async function loadUser() {
+      setCurrentUser(await getCurrentUserFromStorage());
+    }
+    loadUser();
   }, []);
 
   const view = useMemo(() => {
     switch (route) {
       case 'register':
-        return <Register onAuthChange={setCurrentUser} />;
+        return <Register currentUser={currentUser} onAuthChange={setCurrentUser} />;
       case 'admin':
-        return <Admin onAuthChange={setCurrentUser} />;
+        return <Admin currentUser={currentUser} onAuthChange={setCurrentUser} />;
       case 'approve':
-        return <Approve onAuthChange={setCurrentUser} />;
+        return <Approve currentUser={currentUser} onAuthChange={setCurrentUser} />;
       case 'my-requests':
         return <MyRequests />;
       case 'edit':
@@ -60,13 +62,12 @@ function App() {
       default:
         return <Home />;
     }
-  }, [route]);
+  }, [route, currentUser]);
 
   return (
     <div className="AppRoot">
       <Header currentUser={currentUser} onAuthChange={setCurrentUser} />
-      <div className="MainContainer Shell">
-        <Sidebar currentUser={currentUser} />
+      <div className="MainContainer">
         <main className="ContentArea">
           {view}
         </main>

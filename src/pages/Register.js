@@ -14,15 +14,31 @@ const initialForm = {
   moreKids: 'no'
 };
 
-function Register({ onAuthChange }) {
+function Register({ currentUser, onAuthChange }) {
   const [form, setForm] = useState(initialForm);
   const [selectedSlots, setSelectedSlots] = useState([]);
   const [availability, setAvailability] = useState({});
   const [sent, setSent] = useState(false);
 
   useEffect(() => {
-    setAvailability(getAvailability());
+    async function load() {
+      setAvailability(await getAvailability());
+    }
+    load();
   }, []);
+
+  // Check and sync user state
+  useEffect(() => {
+    if (!currentUser) {
+      const checkUser = async () => {
+        const user = await getCurrentUserFromStorage();
+        if (user && onAuthChange) {
+          onAuthChange(user);
+        }
+      };
+      checkUser();
+    }
+  }, [currentUser, onAuthChange]);
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
@@ -34,16 +50,32 @@ function Register({ onAuthChange }) {
     );
   }, [form, selectedSlots]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const user = getCurrentUserFromStorage();
+    // Prevent form submission - we'll use the sticky button instead
+  };
+
+  const handleRegister = async () => {
+    // Use currentUser prop first, fallback to checking storage
+    let user = currentUser;
     if (!user) {
-      alert('Log in of registreer eerst om te kunnen inschrijven.');
-      // trigger header modal by changing hash => header button
-      onAuthChange && onAuthChange(user);
+      user = await getCurrentUserFromStorage();
+      if (onAuthChange) {
+        onAuthChange(user);
+      }
+    }
+    
+    if (!user) {
+      alert('Log in of registreer eerst om te kunnen inschrijven. Klik op "Log in / Registreer" in de header.');
       return;
     }
-    addRegistration({
+    
+    if (!canSubmit) {
+      alert('Vul alle verplichte velden in en selecteer minimaal één tijdstip.');
+      return;
+    }
+    
+    await addRegistration({
       ...form,
       userId: user.id,
       slots: selectedSlots,
@@ -56,45 +88,121 @@ function Register({ onAuthChange }) {
   if (sent) {
     return (
       <div className="Register">
-        <h2>Inschrijving verzonden</h2>
-        <p>Je aanvraag is ingediend en verschijnt op de goedkeuringspagina voor de admin.</p>
-        <a className="btn" href="#/home">Terug naar Home</a>
+        <div className="card" style={{textAlign: 'center', padding: '48px 32px'}}>
+          <div style={{fontSize: '4rem', marginBottom: '16px'}}>🎉</div>
+          <h2>Inschrijving verzonden!</h2>
+          <p style={{marginTop: '12px', marginBottom: '24px', fontSize: '16px'}}>
+            Je aanvraag is ingediend en verschijnt op de goedkeuringspagina voor de admin. 
+            Je ontvangt een bevestiging zodra je inschrijving is goedgekeurd.
+          </p>
+          <a className="btn btn-primary" href="#/home">Terug naar Home</a>
+        </div>
+      </div>
+    );
+  }
+  
+  if (!currentUser) {
+    return (
+      <div className="Register">
+        <div className="card" style={{
+          textAlign: 'center',
+          padding: '48px 32px',
+          background: 'linear-gradient(135deg, rgba(99,102,241,0.1) 0%, rgba(236,72,153,0.1) 100%)',
+          border: '2px solid var(--color-primary-light)'
+        }}>
+          <div style={{fontSize: '4rem', marginBottom: '16px'}}>🔐</div>
+          <h2>Inloggen vereist</h2>
+          <p style={{marginTop: '12px', marginBottom: '24px', fontSize: '16px'}}>
+            Je moet ingelogd zijn om een inschrijving te kunnen doen. 
+            Klik op de knop "Log in / Registreer" in de header om in te loggen of een account aan te maken.
+          </p>
+          <a className="btn btn-primary" href="#/home">
+            Terug naar Home
+          </a>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="Register">
-      <h2>Inschrijfformulier</h2>
-      <form className="Form" onSubmit={handleSubmit}>
-        <div className="Form__grid">
+    <>
+      <div className="Register">
+        <h2>Inschrijfformulier</h2>
+        <form className="Form" onSubmit={handleSubmit}>
+          <div className="Form__grid">
           <label>
-            <span>Naam ouder/voogd</span>
-            <input name="parentName" value={form.parentName} onChange={handleChange} required />
+            <span>Naam ouder/voogd *</span>
+            <input 
+              name="parentName" 
+              value={form.parentName} 
+              onChange={handleChange} 
+              placeholder="Jan Janssen"
+              required 
+            />
           </label>
           <label>
-            <span>Telefoon ouder/voogd</span>
-            <input name="parentPhone" value={form.parentPhone} onChange={handleChange} required />
+            <span>Telefoon ouder/voogd *</span>
+            <input 
+              name="parentPhone" 
+              value={form.parentPhone} 
+              onChange={handleChange}
+              placeholder="+32 123 45 67 89"
+              required 
+            />
           </label>
           <label>
-            <span>E-mail ouder/voogd</span>
-            <input type="email" name="parentEmail" value={form.parentEmail} onChange={handleChange} required />
+            <span>E-mail ouder/voogd *</span>
+            <input 
+              type="email" 
+              name="parentEmail" 
+              value={form.parentEmail} 
+              onChange={handleChange}
+              placeholder="jan@voorbeeld.nl"
+              required 
+            />
           </label>
           <label>
-            <span>Naam leerling</span>
-            <input name="studentName" value={form.studentName} onChange={handleChange} required />
+            <span>Naam leerling *</span>
+            <input 
+              name="studentName" 
+              value={form.studentName} 
+              onChange={handleChange}
+              placeholder="Piet Janssen"
+              required 
+            />
           </label>
           <label>
-            <span>Leeftijd leerling</span>
-            <input name="studentAge" value={form.studentAge} onChange={handleChange} required />
+            <span>Leeftijd leerling *</span>
+            <input 
+              name="studentAge" 
+              type="number"
+              min="12"
+              max="18"
+              value={form.studentAge} 
+              onChange={handleChange}
+              placeholder="15"
+              required 
+            />
           </label>
           <label>
-            <span>Leerjaar</span>
-            <input name="studentLeerjaar" value={form.studentLeerjaar} onChange={handleChange} required />
+            <span>Leerjaar *</span>
+            <input 
+              name="studentLeerjaar" 
+              value={form.studentLeerjaar} 
+              onChange={handleChange}
+              placeholder="1ste secundair"
+              required 
+            />
           </label>
           <label>
-            <span>Studierichting</span>
-            <input name="studentStudierichting" value={form.studentStudierichting} onChange={handleChange} required />
+            <span>Studierichting *</span>
+            <input 
+              name="studentStudierichting" 
+              value={form.studentStudierichting} 
+              onChange={handleChange}
+              placeholder="ASO"
+              required 
+            />
           </label>
           <label>
             <span>Meerdere kinderen?</span>
@@ -105,8 +213,23 @@ function Register({ onAuthChange }) {
           </label>
         </div>
         <div className="CalendarSection">
-          <h3>Kies je lesblokken (max. 2 per dag)</h3>
-          <p className="hint">Groen = beschikbaar, rood = bezet, grijs = niet beschikbaar. Je kan meerdere uren selecteren, maar maximaal 2 per dag.</p>
+          <h3>📅 Kies je lesblokken</h3>
+          <p className="hint">
+            <strong>💡 Tip:</strong> Klik op beschikbare tijdstippen om ze te selecteren. 
+            Je kunt meerdere uren selecteren, maar maximaal 2 per dag. 
+            Groen = beschikbaar, rood = bezet, grijs = niet beschikbaar.
+          </p>
+          {selectedSlots.length > 0 && (
+            <div style={{
+              background: 'rgba(16,185,129,0.1)',
+              padding: '12px 16px',
+              borderRadius: 'var(--radius-md)',
+              marginBottom: '20px',
+              border: '2px solid rgba(16,185,129,0.3)'
+            }}>
+              <strong>✓ {selectedSlots.length} tijdstip{selectedSlots.length !== 1 ? 'pen' : ''} geselecteerd</strong>
+            </div>
+          )}
           <Calendar
             availability={availability}
             selectedSlots={selectedSlots}
@@ -114,11 +237,20 @@ function Register({ onAuthChange }) {
             readOnly={false}
           />
         </div>
-        <div className="Form__actions">
-          <button className="btn btn-primary" disabled={!canSubmit} type="submit">Verzenden</button>
-        </div>
       </form>
-    </div>
+      </div>
+      
+      {/* Sticky register button */}
+      <div className="Register__stickyButton">
+        <button 
+          className="btn btn-primary Register__submitBtn" 
+          disabled={!canSubmit} 
+          onClick={handleRegister}
+        >
+          {canSubmit ? '📝 Schrijf in' : 'Vul alle velden in'}
+        </button>
+      </div>
+    </>
   );
 }
 

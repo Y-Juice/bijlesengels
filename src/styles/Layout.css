@@ -1,19 +1,45 @@
-.Shell { display: grid; grid-template-columns: 260px 1fr; gap: 16px; padding: 12px; }
-.Sidebar { display: flex; flex-direction: column; gap: 12px; background: #ffffff; border: 2px solid #1f2c8c; border-radius: 18px; padding: 16px; color: #1f2c8c; height: calc(100vh - 120px); position: sticky; top: 70px; box-shadow: 0 6px 16px rgba(31,44,140,0.12); }
-.Sidebar__brand { font-weight: 900; font-size: 20px; }
-.Sidebar__nav { display: grid; gap: 8px; }
-.Sidebar__link { text-decoration: none; color: #1f2c8c; padding: 10px 12px; border: 1px solid #1f2c8c; border-radius: 14px; background: #f7fbff; }
-.Sidebar__footer { margin-top: auto; font-size: 12px; opacity: 0.9; }
+.ContentArea { 
+  min-height: 70vh; 
+  width: 100%;
+}
 
-.ContentArea { min-height: 70vh; }
+.MobileNav { 
+  display: none; 
+  position: fixed; 
+  bottom: 20px; 
+  left: 20px; 
+  right: 20px; 
+  background: var(--color-surface);
+  border-radius: var(--radius-lg); 
+  padding: 12px; 
+  box-shadow: var(--shadow-xl); 
+  z-index: 100; 
+  justify-content: space-around;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(99,102,241,0.2);
+}
 
-.MobileNav { display: none; position: fixed; bottom: 12px; left: 12px; right: 12px; background: #ffffff; border: 2px solid #1f2c8c; border-radius: 18px; padding: 10px; box-shadow: 0 10px 24px rgba(31,44,140,0.2); z-index: 20; justify-content: space-around; }
-.MobileNav__link { text-decoration: none; color: #1f2c8c; font-weight: 800; }
+.MobileNav__link { 
+  text-decoration: none; 
+  color: var(--color-text);
+  font-weight: 700;
+  font-size: 14px;
+  padding: 10px 16px;
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease;
+}
+
+.MobileNav__link:hover {
+  background: rgba(99,102,241,0.1);
+  color: var(--color-primary);
+}
 
 @media (max-width: 900px) {
-  .Shell { grid-template-columns: 1fr; }
-  .Sidebar { display: none; }
-  .MobileNav { display: flex; }
-  .ContentArea { padding-bottom: 84px; }
+  .MobileNav { 
+    display: flex; 
+  }
+  .ContentArea { 
+    padding-bottom: 100px; 
+  }
 }
 

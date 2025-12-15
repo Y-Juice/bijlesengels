@@ -1,6 +1,76 @@
-.MyRequests { padding: 12px; color: #1f2c8c; }
-.ReqList { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
-.ReqItem { display: flex; justify-content: space-between; align-items: center; gap: 12px; background: #fff; border: 2px solid #1f2c8c; border-radius: 18px; padding: 12px; box-shadow: 0 6px 16px rgba(31,44,140,0.12); }
-.ReqMeta { font-size: 14px; }
-.ReqActions { display: flex; gap: 8px; }
+.MyRequests { 
+  padding: 0;
+  color: var(--color-text);
+}
+
+.MyRequests h2 {
+  font-size: 2rem;
+  margin-bottom: 8px;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.ReqList { 
+  list-style: none; 
+  margin: 0; 
+  padding: 0; 
+  display: grid; 
+  gap: 16px; 
+}
+
+.ReqItem { 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  gap: 16px; 
+  background: var(--color-surface);
+  border-radius: var(--radius-lg); 
+  padding: 20px; 
+  box-shadow: var(--shadow-md);
+  transition: all 0.2s ease;
+  border: 2px solid transparent;
+}
+
+.ReqItem:hover {
+  border-color: var(--color-primary-light);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+.ReqInfo {
+  flex: 1;
+}
+
+.ReqInfo strong {
+  color: var(--color-primary);
+  font-size: 1.1rem;
+}
+
+.ReqMeta { 
+  font-size: 14px;
+  color: var(--color-text-light);
+  margin-top: 8px;
+}
+
+.ReqMeta strong {
+  color: var(--color-text);
+}
+
+.ReqSlots {
+  font-size: 13px;
+  color: var(--color-text-light);
+  margin-top: 4px;
+  font-family: monospace;
+  background: var(--color-bg);
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  display: inline-block;
+}
+
+.ReqActions { 
+  display: flex; 
+  gap: 8px; 
+}
 

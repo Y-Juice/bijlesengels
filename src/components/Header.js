@@ -1,20 +1,24 @@
 import React, { useState } from 'react';
 import '../styles/Header.css';
 import AuthModal from './auth/AuthModal';
-import { logout, getCurrentUserFromStorage } from '../services/storage';
+import { signOut, getCurrentUserFromStorage } from '../services/storage';
+import logo from '../assets/logobijlessen.png';
 
 function Header({ currentUser, onAuthChange }) {
   const [showAuth, setShowAuth] = useState(false);
 
   const handleLogout = () => {
-    logout();
-    onAuthChange(getCurrentUserFromStorage());
-    window.location.hash = '#/home';
+    (async () => {
+      await signOut();
+      onAuthChange(await getCurrentUserFromStorage());
+      window.location.hash = '#/home';
+    })();
   };
 
   return (
     <header className="Header">
       <div className="Header__brand" onClick={() => (window.location.hash = '#/home')}>
+        <img src={logo} alt="Bijles Engels Logo" className="Header__logo" />
         <span className="Header__title">BIJLESSEN ENGELS</span>
       </div>
       <nav className="Header__nav">

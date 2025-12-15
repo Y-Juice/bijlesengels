@@ -6,21 +6,28 @@ function MyRequests() {
   const [list, setList] = useState([]);
 
   useEffect(() => {
-    const user = getCurrentUserFromStorage();
-    if (!user) { window.location.hash = '#/home'; return; }
-    setList(getUserRegistrations(user.id));
+    async function load() {
+      const user = await getCurrentUserFromStorage();
+      if (!user) { window.location.hash = '#/home'; return; }
+      setList(await getUserRegistrations(user.id));
+    }
+    load();
   }, []);
 
   const refresh = () => {
-    const user = getCurrentUserFromStorage();
-    if (!user) return;
-    setList(getUserRegistrations(user.id));
+    (async () => {
+      const user = await getCurrentUserFromStorage();
+      if (!user) return;
+      setList(await getUserRegistrations(user.id));
+    })();
   };
 
   const cancel = (id) => {
-    if (!window.confirm('Weet je zeker dat je deze inschrijving wilt annuleren?')) return;
-    deleteRegistration(id);
-    refresh();
+    (async () => {
+      if (!window.confirm('Weet je zeker dat je deze inschrijving wilt annuleren?')) return;
+      await deleteRegistration(id);
+      refresh();
+    })();
   };
 
   const edit = (id) => {
