@@ -181,6 +181,24 @@ export async function signUp(user) {
   return { ok: true, user: newUser };
 }
 
+export async function resetPassword(email) {
+  if (useSupabase) {
+    try {
+      const redirectTo = typeof window !== 'undefined' ? window.location.origin : undefined;
+      const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo });
+      if (error) {
+        console.error('resetPassword error', error);
+        return { ok: false };
+      }
+      return { ok: true };
+    } catch (e) {
+      console.error('resetPassword exception', e);
+      return { ok: false };
+    }
+  }
+  return { ok: true };
+}
+
 export async function signOut() {
   if (useSupabase) {
     try {
