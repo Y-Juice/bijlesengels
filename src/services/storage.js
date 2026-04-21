@@ -326,7 +326,7 @@ export async function addRegistration(reg) {
       status: reg.status || 'pending',
       created_at: reg.createdAt || Date.now()
     };
-    const { error, data } = await supabase.from('registrations').insert([payload]).select();
+    const { error } = await supabase.from('registrations').insert([payload]).select();
     if (error) { 
       console.error('Supabase addRegistration error', error); 
       return null; 
