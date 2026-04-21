@@ -4,6 +4,46 @@ const USERS_KEY = 'be_users';
 const SESSION_KEY = 'be_session';
 const AVAILABILITY_KEY = 'be_availability';
 
+function normalizeRole(role) {
+  const cleanedRole = String(role || '').trim().toLowerCase();
+  return cleanedRole === 'admin' ? 'admin' : 'parent';
+}
+
+function isAdminEmail(email) {
+  if (!email) return false;
+  return ADMIN_EMAILS.includes(String(email).trim().toLowerCase());
+}
+
+async function getProfileForAuthUser(user) {
+  const { data: profileById, error: byIdError } = await supabase
+    .from('profiles')
+    .select('*')
+    .eq('id', user.id)
+    .limit(1)
+    .maybeSingle();
+
+  if (byIdError) {
+    console.warn('profiles lookup by id failed', byIdError);
+  }
+  if (!byIdError && profileById) {
+    return { profile: profileById, error: null };
+  }
+
+  // Fallback for existing data where profile.id is not equal to auth user id.
+  const { data: profileByEmail, error: byEmailError } = await supabase
+    .from('profiles')
+    .select('*')
+    .eq('email', user.email)
+    .limit(1)
+    .maybeSingle();
+
+  if (byEmailError) {
+    console.warn('profiles lookup by email failed', byEmailError);
+    return { profile: null, error: null };
+  }
+  return { profile: profileByEmail || null, error: null };
+}
+
 function read(key, fallback) {
   try {
     const raw = localStorage.getItem(key);
@@ -26,27 +66,6 @@ function seedAdminIfMissing() {
 }
 
 // Helper to ensure admin user exists in Supabase
-async function ensureAdminExists() {
-  if (!useSupabase) return;
-  try {
-    // Check if admin profile exists
-    const { data: adminProfile } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('role', 'admin')
-      .limit(1)
-      .maybeSingle();
-    
-    if (!adminProfile) {
-      // Admin doesn't exist, try to create one
-      // Note: This requires manual creation of admin user in Supabase Auth first
-      console.warn('Admin user not found in profiles. Please create an admin user in Supabase Auth with email "admin@bijlesengels.be" and then create a profile with role="admin"');
-    }
-  } catch (e) {
-    console.error('ensureAdminExists error', e);
-  }
-}
-
 // Authentication helpers (Supabase Auth when available, localStorage fallback)
 export async function getCurrentUserFromStorage() {
   // if supabase available, return merged profile
@@ -54,18 +73,19 @@ export async function getCurrentUserFromStorage() {
     try {
       const { data: sessionData, error: sessErr } = await supabase.auth.getSession();
       if (sessErr || !sessionData?.data?.session) {
-        await ensureAdminExists();
         return null;
       }
       const user = sessionData.data.session.user;
-      // fetch profile from 'profiles' table
-      const { data: profile, error: pErr } = await supabase.from('profiles').select('*').eq('id', user.id).limit(1).maybeSingle();
+      if (isAdminEmail(user.email)) {
+        return { id: user.id, email: user.email, role: 'admin' };
+      }
+      const { profile, error: pErr } = await getProfileForAuthUser(user);
       if (pErr) {
         console.error('getCurrentUserFromStorage profile error', pErr);
         // still return basic user
-        return { id: user.id, email: user.email };
+        return { id: user.id, email: user.email, role: normalizeRole(user.user_metadata?.role) };
       }
-      return { id: user.id, email: user.email, ...profile };
+      return { id: user.id, email: user.email, ...profile, role: normalizeRole(profile?.role || user.user_metadata?.role) };
     } catch (e) {
       console.error('getCurrentUserFromStorage supabase error', e);
       return null;
@@ -88,23 +108,36 @@ export async function signIn(identifier, password) {
       const { data, error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) {
         console.error('supabase signIn error', error);
-        return null;
+        const errorMessage = String(error.message || '').toLowerCase();
+        if (errorMessage.includes('email not confirmed')) {
+          return { ok: false, reason: 'email_not_confirmed' };
+        }
+        if (errorMessage.includes('invalid login credentials')) {
+          return { ok: false, reason: 'invalid_credentials' };
+        }
+        return { ok: false, reason: 'unknown' };
       }
       const user = data.user;
-      const { data: profile } = await supabase.from('profiles').select('*').eq('id', user.id).limit(1).maybeSingle();
-      return { id: user.id, email: user.email, ...profile };
+      if (isAdminEmail(user.email)) {
+        return { ok: true, user: { id: user.id, email: user.email, role: 'admin' } };
+      }
+      const { profile } = await getProfileForAuthUser(user);
+      return {
+        ok: true,
+        user: { id: user.id, email: user.email, ...profile, role: normalizeRole(profile?.role || user.user_metadata?.role) }
+      };
     } catch (e) {
       console.error('signIn supabase error', e);
-      return null;
+      return { ok: false, reason: 'unknown' };
     }
   }
   // fallback local
   seedAdminIfMissing();
   const users = read(USERS_KEY, []);
   const found = users.find((u) => u.username === identifier && u.password === password) || users.find((u) => u.email === identifier && u.password === password);
-  if (!found) return null;
+  if (!found) return { ok: false, reason: 'invalid_credentials' };
   write(SESSION_KEY, found);
-  return found;
+  return { ok: true, user: found };
 }
 
 export async function signUp(user) {
@@ -113,13 +146,20 @@ export async function signUp(user) {
       // create auth user
       const { data, error } = await supabase.auth.signUp({ email: user.email, password: user.password });
       if (error) { 
-        console.error('supabase signUp error', error); 
-        return null; 
+        console.error('supabase signUp error', error);
+        const errorMessage = String(error.message || '').toLowerCase();
+        if (error.status === 429 || errorMessage.includes('15 seconds') || errorMessage.includes('request this after')) {
+          return { ok: false, reason: 'rate_limit' };
+        }
+        if (errorMessage.includes('already registered') || errorMessage.includes('already exists')) {
+          return { ok: false, reason: 'already_exists' };
+        }
+        return { ok: false, reason: 'unknown' };
       }
       const uid = data.user?.id || data?.user?.id;
       if (!uid) {
         console.error('No user ID returned from signUp');
-        return null;
+        return { ok: false, reason: 'unknown' };
       }
       // insert profile row
       const profile = {
@@ -127,7 +167,7 @@ export async function signUp(user) {
         name: user.name,
         phone: user.phone,
         username: user.username,
-        role: user.role || 'parent',
+        role: normalizeRole(user.role),
         email: user.email
       };
       const { error: pErr } = await supabase.from('profiles').insert([profile]);
@@ -135,22 +175,22 @@ export async function signUp(user) {
         console.error('supabase insert profile error', pErr);
         // Try to delete the auth user if profile creation fails
         await supabase.auth.admin.deleteUser(uid).catch(() => {});
-        return null;
+        return { ok: false, reason: 'unknown' };
       }
-      return { id: uid, ...profile };
+      return { ok: true, user: { id: uid, ...profile } };
     } catch (e) {
       console.error('signUp supabase error', e);
-      return null;
+      return { ok: false, reason: 'unknown' };
     }
   }
   // fallback local
   const users = read(USERS_KEY, []);
-  if (users.find((u) => u.username === user.username)) return null;
-  const newUser = { ...user, id: `u_${Date.now()}` };
+  if (users.find((u) => u.username === user.username)) return { ok: false, reason: 'already_exists' };
+  const newUser = { ...user, role: normalizeRole(user.role), id: `u_${Date.now()}` };
   users.push(newUser);
   write(USERS_KEY, users);
   write(SESSION_KEY, newUser);
-  return newUser;
+  return { ok: true, user: newUser };
 }
 
 export async function signOut() {
@@ -169,6 +209,10 @@ export async function signOut() {
 
 const SUPABASE_URL = process.env.REACT_APP_SUPABASE_URL;
 const SUPABASE_KEY = process.env.REACT_APP_SUPABASE_KEY;
+const ADMIN_EMAILS = String(process.env.REACT_APP_ADMIN_EMAILS || '')
+  .split(',')
+  .map((email) => email.trim().toLowerCase())
+  .filter(Boolean);
 const useSupabase = !!(SUPABASE_URL && SUPABASE_KEY);
 let supabase = null;
 if (useSupabase) {

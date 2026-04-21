@@ -12,6 +12,7 @@ function AuthModal({ onClose, onAuthChange }) {
     password: ''
   });
   const [error, setError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -28,18 +29,23 @@ function AuthModal({ onClose, onAuthChange }) {
       setError('Vul je wachtwoord in');
       return;
     }
-    const user = await signIn(form.username || form.email, form.password);
-    if (!user) {
+    const result = await signIn(form.username || form.email, form.password);
+    if (!result?.ok) {
+      if (result?.reason === 'email_not_confirmed') {
+        setError('Je e-mailadres is nog niet bevestigd. Controleer je mailbox en klik op de bevestigingslink.');
+        return;
+      }
       setError('Ongeldige inloggegevens. Controleer je gebruikersnaam/e-mail en wachtwoord.');
       return;
     }
-    onAuthChange(user);
+    onAuthChange(result.user);
     onClose();
   };
 
   const handleRegister = async (e) => {
     e.preventDefault();
     setError('');
+    if (isSubmitting) return;
     
     // Validation
     if (!form.name || !form.email || !form.phone || !form.username || !form.password) {
@@ -57,27 +63,44 @@ function AuthModal({ onClose, onAuthChange }) {
       return;
     }
     
-    const created = await signUp({
-      name: form.name,
-      email: form.email,
-      phone: form.phone,
-      username: form.username,
-      password: form.password,
-      role: 'parent'
-    });
-    
-    if (!created) {
-      setError('Gebruikersnaam of e-mailadres bestaat al. Probeer een andere combinatie.');
-      return;
-    }
-    
-    // auto-login
-    const user = await signIn(form.email, form.password);
-    if (user) {
-      onAuthChange(user);
-      onClose();
-    } else {
-      setError('Account aangemaakt! Je kunt nu inloggen.');
+    setIsSubmitting(true);
+    try {
+      const result = await signUp({
+        name: form.name,
+        email: form.email,
+        phone: form.phone,
+        username: form.username,
+        password: form.password,
+        role: 'parent'
+      });
+
+      if (!result?.ok) {
+        if (result?.reason === 'rate_limit') {
+          setError('Te veel pogingen. Wacht 15 seconden en probeer opnieuw.');
+          return;
+        }
+        if (result?.reason === 'already_exists') {
+          setError('Gebruikersnaam of e-mailadres bestaat al. Probeer een andere combinatie.');
+          return;
+        }
+        setError('Account aanmaken is mislukt. Probeer het opnieuw.');
+        return;
+      }
+
+      // auto-login
+      const signInResult = await signIn(form.email, form.password);
+      if (signInResult?.ok) {
+        onAuthChange(signInResult.user);
+        onClose();
+      } else {
+        if (signInResult?.reason === 'email_not_confirmed') {
+          setError('Account aangemaakt! Bevestig eerst je e-mailadres via de mail, daarna kun je inloggen.');
+          return;
+        }
+        setError('Account aangemaakt! Je kunt nu inloggen.');
+      }
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -170,7 +193,9 @@ function AuthModal({ onClose, onAuthChange }) {
                 autoComplete="new-password"
               />
             </label>
-            <button className="btn btn-primary" type="submit">Account aanmaken ✨</button>
+            <button className="btn btn-primary" type="submit" disabled={isSubmitting}>
+              {isSubmitting ? 'Bezig met aanmaken...' : 'Account aanmaken ✨'}
+            </button>
           </form>
         )}
       </div>

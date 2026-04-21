@@ -3,7 +3,6 @@ import '../styles/Home.css';
 import introsection from '../assets/introsection.jpg';
 import teaching from '../assets/teaching.jpg';
 import whatsapp from '../assets/whatsapp.jpg';
-import poster from '../assets/poster.jpeg';
 
 function Home() {
   return (
@@ -15,7 +14,7 @@ function Home() {
           <ul className="Hero__bullets">
             <li>Volledig online via Zoom</li>
             <li>Flexibele uren tijdens schoolvakanties</li>
-            <li>1 uur (€17) of 2 uur (€30)</li>
+            <li>1 uur (€20) of 2 uur (€30)</li>
           </ul>
           <div className="Hero__cta">
             <a className="btn btn-primary" href="#/register">Inschrijven</a>
@@ -83,7 +82,7 @@ function Home() {
             </p>
             <div className="InfoHero__pricing">
               <div className="InfoHero__priceCard">
-                <div className="InfoHero__priceAmount">€17</div>
+                <div className="InfoHero__priceAmount">€20</div>
                 <div className="InfoHero__priceLabel">per uur</div>
                 <p>Perfect voor gerichte hulp bij specifieke onderwerpen</p>
               </div>
@@ -98,9 +97,6 @@ function Home() {
               <strong>Let op:</strong> Maximaal 2 uur per dag per leerling om de kwaliteit 
               en concentratie te waarborgen.
             </p>
-          </div>
-          <div className="InfoHero__image">
-            <img src={poster} alt="Tarieven informatie" />
           </div>
         </div>
       </section>
