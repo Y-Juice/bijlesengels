@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
+import { FiCalendar, FiInfo, FiCheck, FiX, FiSun, FiSave } from 'react-icons/fi';
 import '../styles/Admin.css';
 import Calendar from '../shared/Calendar';
 import { getCurrentUserFromStorage, getAvailability, setAvailability, getRegistrations } from '../services/storage';
@@ -81,11 +82,17 @@ function Admin({ currentUser, onAuthChange }) {
 
   return (
     <div className="Admin">
-      <h2>📅 Beschikbare uren instellen</h2>
+      <h2 className="Admin__title">
+        <FiCalendar aria-hidden="true" />
+        <span>Beschikbare uren instellen</span>
+      </h2>
       <p className="hint">
-        <strong>💡 Tip:</strong> Klik op tijdstippen om beschikbaarheid te wijzigen. 
-        Groen = beschikbaar, grijs = niet beschikbaar, rood = bezet. 
-        Gebruik de bulk acties om snel meerdere tijdstippen in te stellen.
+        <FiInfo className="hint__icon" aria-hidden="true" />
+        <span>
+          <strong>Tip:</strong> Klik op tijdstippen om beschikbaarheid te wijzigen.
+          Groen = beschikbaar, grijs = niet beschikbaar, rood = bezet.
+          Gebruik de bulk acties om snel meerdere tijdstippen in te stellen.
+        </span>
       </p>
       
       <div className="Admin__stats">
@@ -109,16 +116,16 @@ function Admin({ currentUser, onAuthChange }) {
 
       <div className="Admin__controls">
         <button className="btn" onClick={() => handleBulkAction('all-available')}>
-          ✓ Alles beschikbaar maken
+          <FiCheck aria-hidden="true" /> Alles beschikbaar maken
         </button>
         <button className="btn" onClick={() => handleBulkAction('all-unavailable')}>
-          ✗ Alles niet beschikbaar maken
+          <FiX aria-hidden="true" /> Alles niet beschikbaar maken
         </button>
         <button className="btn" onClick={() => handleBulkAction('weekdays-available')}>
-          📅 Weekdagen beschikbaar
+          <FiCalendar aria-hidden="true" /> Weekdagen beschikbaar
         </button>
         <button className="btn" onClick={() => handleBulkAction('weekends-available')}>
-          🎉 Weekend beschikbaar
+          <FiSun aria-hidden="true" /> Weekend beschikbaar
         </button>
       </div>
 
@@ -144,11 +151,11 @@ function Admin({ currentUser, onAuthChange }) {
             alignItems: 'center',
             gap: '8px'
           }}>
-            ✓ Opgeslagen!
+            <FiCheck aria-hidden="true" /> Opgeslagen!
           </div>
         )}
         <button className="btn btn-primary" onClick={handleSave}>
-          💾 Opslaan
+          <FiSave aria-hidden="true" /> Opslaan
         </button>
       </div>
     </div>

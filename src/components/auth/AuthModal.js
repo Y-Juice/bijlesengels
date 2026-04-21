@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { FiEye, FiEyeOff, FiX, FiArrowLeft } from 'react-icons/fi';
 import '../../styles/Auth.css';
 import { signIn, signUp, resetPassword } from '../../services/storage';
 
@@ -190,7 +191,9 @@ function AuthModal({ onClose, onAuthChange }) {
   return (
     <div className="ModalBackdrop" onClick={onClose}>
       <div className="Modal" onClick={(e) => e.stopPropagation()}>
-        <button className="Modal__close" onClick={onClose} aria-label="Sluiten">×</button>
+        <button className="Modal__close" onClick={onClose} aria-label="Sluiten">
+          <FiX aria-hidden="true" />
+        </button>
 
         {!showForgotPassword && (
           <div className="Tabs">
@@ -247,7 +250,7 @@ function AuthModal({ onClose, onAuthChange }) {
                 setSuccess('');
               }}
             >
-              ← Terug naar inloggen
+              <FiArrowLeft aria-hidden="true" /> Terug naar inloggen
             </button>
           </form>
         ) : mode === 'login' ? (
@@ -282,7 +285,7 @@ function AuthModal({ onClose, onAuthChange }) {
                   onClick={() => setShowPassword((s) => !s)}
                   aria-label={showPassword ? 'Verberg wachtwoord' : 'Toon wachtwoord'}
                 >
-                  {showPassword ? '🙈' : '👁️'}
+                  {showPassword ? <FiEyeOff aria-hidden="true" /> : <FiEye aria-hidden="true" />}
                 </button>
               </div>
             </label>
@@ -301,7 +304,7 @@ function AuthModal({ onClose, onAuthChange }) {
               type="submit"
               disabled={!canLogin}
             >
-              {isSubmitting ? 'Bezig met inloggen...' : 'Inloggen 🚀'}
+              {isSubmitting ? 'Bezig met inloggen...' : 'Inloggen'}
             </button>
           </form>
         ) : (
@@ -357,7 +360,7 @@ function AuthModal({ onClose, onAuthChange }) {
                   onClick={() => setShowPassword((s) => !s)}
                   aria-label={showPassword ? 'Verberg wachtwoord' : 'Toon wachtwoord'}
                 >
-                  {showPassword ? '🙈' : '👁️'}
+                  {showPassword ? <FiEyeOff aria-hidden="true" /> : <FiEye aria-hidden="true" />}
                 </button>
               </div>
               {form.password && (
@@ -386,7 +389,7 @@ function AuthModal({ onClose, onAuthChange }) {
                   onClick={() => setShowConfirmPassword((s) => !s)}
                   aria-label={showConfirmPassword ? 'Verberg wachtwoord' : 'Toon wachtwoord'}
                 >
-                  {showConfirmPassword ? '🙈' : '👁️'}
+                  {showConfirmPassword ? <FiEyeOff aria-hidden="true" /> : <FiEye aria-hidden="true" />}
                 </button>
               </div>
               {form.confirmPassword && form.password !== form.confirmPassword && (
@@ -405,7 +408,7 @@ function AuthModal({ onClose, onAuthChange }) {
               type="submit"
               disabled={!canRegister}
             >
-              {isSubmitting ? 'Bezig met aanmaken...' : 'Account aanmaken ✨'}
+              {isSubmitting ? 'Bezig met aanmaken...' : 'Account aanmaken'}
             </button>
           </form>
         )}

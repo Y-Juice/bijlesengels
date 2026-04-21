@@ -1,19 +1,19 @@
-.Header { 
-  display: flex; 
-  align-items: center; 
-  justify-content: space-between; 
-  padding: 16px 24px; 
-  background: var(--color-surface);
-  border-bottom: 1px solid rgba(99,102,241,0.1);
-  position: sticky; 
-  top: 0; 
+.Header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 24px;
+  background: var(--color-palm);
+  color: var(--color-serenade);
+  border-bottom: 2px solid var(--color-palm-dark);
+  position: sticky;
+  top: 0;
   z-index: 100;
-  box-shadow: var(--shadow-sm);
-  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-md);
 }
 
-.Header__brand { 
-  cursor: pointer; 
+.Header__brand {
+  cursor: pointer;
   transition: transform 0.2s ease;
   display: flex;
   align-items: center;
@@ -21,31 +21,103 @@
 }
 
 .Header__brand:hover {
-  transform: scale(1.05);
+  transform: scale(1.03);
 }
 
 .Header__logo {
   height: 40px;
   width: auto;
   object-fit: contain;
+  filter: brightness(0) invert(1);
 }
 
 .Header__title {
-  font-weight: 800;
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  letter-spacing: -0.5px;
+  font-family: var(--font-display);
+  font-weight: 900;
+  color: var(--color-serenade);
+  letter-spacing: -0.01em;
   font-size: 1.5rem;
 }
 
-.Header__nav { 
-  display: flex; 
-  gap: 12px; 
+.Header__nav {
+  display: flex;
+  gap: 10px;
   flex-wrap: wrap;
   flex: 1;
   justify-content: center;
+}
+
+.Header__link {
+  color: var(--color-serenade);
+  text-decoration: none;
+  font-weight: 600;
+  background: transparent;
+  padding: 10px 16px;
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease;
+  font-size: 14px;
+  border: 2px solid transparent;
+}
+
+.Header__link:hover {
+  background: var(--color-fringy);
+  color: var(--color-palm);
+  border-color: var(--color-fringy);
+}
+
+.Header__auth {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.Header__auth .btn {
+  background: var(--color-fringy);
+  color: var(--color-palm);
+  border-color: var(--color-fringy);
+}
+
+.Header__auth .btn:hover {
+  background: var(--color-fringy-dark);
+}
+
+.Header__auth .btn-primary {
+  background: var(--color-sail);
+  color: var(--color-palm);
+  border-color: var(--color-sail);
+}
+
+.Header__auth .btn-primary:hover {
+  background: var(--color-fringy);
+  color: var(--color-palm);
+  border-color: var(--color-fringy);
+}
+
+.Header__user {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.Header__welcome {
+  color: var(--color-serenade);
+  font-weight: 600;
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-xl);
+}
+
+.Footer {
+  padding: 28px 20px;
+  text-align: center;
+  color: var(--color-serenade);
+  background: var(--color-palm);
+  font-size: 14px;
+  font-weight: 500;
 }
 
 @media (max-width: 900px) {
@@ -53,66 +125,19 @@
     flex-wrap: wrap;
     gap: 12px;
   }
-  
+
   .Header__nav {
     order: 3;
     width: 100%;
     justify-content: flex-start;
     margin-top: 8px;
   }
-  
+
   .Header__brand {
     flex: 1;
   }
-  
+
   .Header__auth {
     order: 2;
   }
 }
-
-.Header__link { 
-  color: var(--color-text); 
-  text-decoration: none; 
-  font-weight: 600; 
-  background: var(--color-bg);
-  padding: 10px 18px; 
-  border-radius: var(--radius-md); 
-  box-shadow: var(--shadow-sm);
-  transition: all 0.2s ease;
-  font-size: 14px;
-}
-
-.Header__link:hover {
-  background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-primary) 100%);
-  color: white;
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-}
-
-.Header__auth { 
-  display: flex; 
-  gap: 12px; 
-  align-items: center; 
-}
-
-.Header__user { 
-  display: flex; 
-  gap: 12px; 
-  align-items: center; 
-}
-
-.Header__welcome { 
-  color: var(--color-text-light); 
-  font-weight: 600;
-  font-size: 14px;
-}
-
-.Footer { 
-  padding: 24px 20px; 
-  text-align: center; 
-  color: var(--color-text-light); 
-  background: var(--color-surface);
-  border-top: 1px solid rgba(99,102,241,0.1);
-  font-size: 14px;
-}
-

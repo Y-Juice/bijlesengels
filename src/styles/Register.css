@@ -1,36 +1,52 @@
-.Register { 
-  padding: 0;
+.Register {
+  padding: 0 0 100px 0;
   color: var(--color-text);
   max-width: 100%;
 }
 
 .Register h2 {
-  font-size: 2rem;
-  margin-bottom: 8px;
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  font-family: var(--font-display);
+  font-size: 2.25rem;
+  margin-bottom: 12px;
+  color: var(--color-palm);
 }
 
-.Form { 
+.Register__sectionTitle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.5rem;
+  margin-bottom: 14px;
+  color: var(--color-palm);
+  font-family: var(--font-display);
+  font-weight: 800;
+}
+
+.Register__sectionTitle svg {
+  color: var(--color-palm);
+  width: 24px;
+  height: 24px;
+}
+
+.Form {
   background: var(--color-surface);
-  border-radius: var(--radius-lg); 
-  padding: 32px; 
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 32px;
   box-shadow: var(--shadow-md);
   margin-bottom: 32px;
 }
 
-.Form__grid { 
-  display: grid; 
-  grid-template-columns: repeat(2, 1fr); 
-  gap: 20px 24px; 
+.Form__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px 24px;
 }
 
-.Form label { 
-  display: flex; 
-  flex-direction: column; 
-  gap: 8px; 
+.Form label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .Form label span {
@@ -39,53 +55,70 @@
   font-size: 14px;
 }
 
-.Form input, .Form select { 
-  padding: 14px 16px; 
-  border: 2px solid rgba(99,102,241,0.2);
+.Form input,
+.Form select {
+  padding: 14px 16px;
+  border: 2px solid var(--color-border);
   border-radius: var(--radius-md);
   font-size: 15px;
   transition: all 0.2s ease;
-  background: var(--color-bg);
+  background: var(--color-surface);
   color: var(--color-text);
-  font-family: inherit;
+  font-family: var(--font-body);
 }
 
-.Form input:focus, .Form select:focus {
+.Form input:focus,
+.Form select:focus {
   outline: none;
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(99,102,241,0.1);
+  border-color: var(--color-palm);
+  box-shadow: 0 0 0 3px rgba(137, 201, 201, 0.35);
 }
 
 .Form input::placeholder {
   color: var(--color-text-light);
 }
 
-.CalendarSection { 
+.CalendarSection {
   margin-top: 32px;
   padding-top: 32px;
-  border-top: 2px dashed rgba(99,102,241,0.2);
+  border-top: 2px dashed var(--color-border);
 }
 
 .CalendarSection h3 {
   font-size: 1.5rem;
   margin-bottom: 12px;
-  color: var(--color-text);
+  color: var(--color-palm);
 }
 
-.hint { 
-  color: var(--color-text-light); 
+.hint {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  color: var(--color-palm);
   font-size: 14px;
-  background: rgba(99,102,241,0.05);
-  padding: 12px 16px;
+  background: var(--color-sail);
+  padding: 14px 18px;
   border-radius: var(--radius-md);
-  border-left: 4px solid var(--color-primary);
   margin-bottom: 20px;
   line-height: 1.6;
 }
 
-.Form__actions { 
-  margin-top: 32px; 
-  display: flex; 
+.hint__icon {
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+  color: var(--color-palm);
+  margin-top: 2px;
+}
+
+.hint strong {
+  color: var(--color-palm);
+  font-weight: 700;
+}
+
+.Form__actions {
+  margin-top: 32px;
+  display: flex;
   justify-content: flex-end;
   gap: 12px;
 }
@@ -97,9 +130,9 @@
   right: 0;
   background: var(--color-surface);
   padding: 16px 20px;
-  box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
-  border-top: 2px solid rgba(99,102,241,0.2);
-  z-index: 100;
+  box-shadow: 0 -6px 24px rgba(2, 38, 30, 0.12);
+  border-top: 2px solid var(--color-border);
+  z-index: 90;
   display: flex;
   justify-content: center;
 }
@@ -108,7 +141,7 @@
   width: 100%;
   max-width: 500px;
   padding: 16px 32px;
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 700;
   box-shadow: var(--shadow-lg);
 }
@@ -118,13 +151,9 @@
   cursor: not-allowed;
 }
 
-.Register {
-  padding-bottom: 100px; /* Space for sticky button */
-}
-
 @media (max-width: 900px) {
-  .Form__grid { 
-    grid-template-columns: 1fr; 
+  .Form__grid {
+    grid-template-columns: 1fr;
   }
   .Form {
     padding: 24px;
@@ -137,4 +166,3 @@
     padding: 14px 24px;
   }
 }
-

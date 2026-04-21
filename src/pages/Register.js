@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { FiCheckCircle, FiLock, FiCalendar, FiInfo, FiCheck, FiEdit3 } from 'react-icons/fi';
 import '../styles/Register.css';
 import Calendar from '../shared/Calendar';
 import { getAvailability, addRegistration, getCurrentUserFromStorage } from '../services/storage';
@@ -88,7 +89,7 @@ function Register({ currentUser, onAuthChange }) {
     return (
       <div className="Register">
         <div className="card" style={{textAlign: 'center', padding: '48px 32px'}}>
-          <div style={{fontSize: '4rem', marginBottom: '16px'}}>🎉</div>
+          <FiCheckCircle style={{fontSize: '4rem', marginBottom: '16px', color: 'var(--color-palm)'}} aria-hidden="true" />
           <h2>Inschrijving verzonden!</h2>
           <p style={{marginTop: '12px', marginBottom: '24px', fontSize: '16px'}}>
             Je aanvraag is ingediend en verschijnt op de goedkeuringspagina voor de admin. 
@@ -109,7 +110,7 @@ function Register({ currentUser, onAuthChange }) {
           background: 'linear-gradient(135deg, rgba(99,102,241,0.1) 0%, rgba(236,72,153,0.1) 100%)',
           border: '2px solid var(--color-primary-light)'
         }}>
-          <div style={{fontSize: '4rem', marginBottom: '16px'}}>🔐</div>
+          <FiLock style={{fontSize: '4rem', marginBottom: '16px', color: 'var(--color-palm)'}} aria-hidden="true" />
           <h2>Inloggen vereist</h2>
           <p style={{marginTop: '12px', marginBottom: '24px', fontSize: '16px'}}>
             Je moet ingelogd zijn om een inschrijving te kunnen doen. 
@@ -211,11 +212,17 @@ function Register({ currentUser, onAuthChange }) {
           </label>
         </div>
         <div className="CalendarSection">
-          <h3>📅 Kies je lesblokken</h3>
+          <h3 className="Register__sectionTitle">
+            <FiCalendar aria-hidden="true" />
+            <span>Kies je lesblokken</span>
+          </h3>
           <p className="hint">
-            <strong>💡 Tip:</strong> Hieronder zie je alleen de tijdstippen die de host 
-            als beschikbaar heeft ingesteld. Klik om een uur te kiezen. 
-            Je kunt meerdere uren selecteren, maar maximaal 2 per dag.
+            <FiInfo className="hint__icon" aria-hidden="true" />
+            <span>
+              <strong>Tip:</strong> Hieronder zie je alleen de tijdstippen die de host
+              als beschikbaar heeft ingesteld. Klik om een uur te kiezen.
+              Je kunt meerdere uren selecteren, maar maximaal 2 per dag.
+            </span>
           </p>
           {selectedSlots.length > 0 && (
             <div style={{
@@ -225,7 +232,8 @@ function Register({ currentUser, onAuthChange }) {
               marginBottom: '20px',
               border: '2px solid rgba(16,185,129,0.3)'
             }}>
-              <strong>✓ {selectedSlots.length} tijdstip{selectedSlots.length !== 1 ? 'pen' : ''} geselecteerd</strong>
+              <FiCheck aria-hidden="true" style={{marginRight: '8px', verticalAlign: '-2px'}} />
+              <strong>{selectedSlots.length} tijdstip{selectedSlots.length !== 1 ? 'pen' : ''} geselecteerd</strong>
             </div>
           )}
           <Calendar
@@ -246,7 +254,13 @@ function Register({ currentUser, onAuthChange }) {
           disabled={!canSubmit} 
           onClick={handleRegister}
         >
-          {canSubmit ? '📝 Schrijf in' : 'Vul alle velden in'}
+          {canSubmit ? (
+            <>
+              <FiEdit3 aria-hidden="true" /> Schrijf in
+            </>
+          ) : (
+            'Vul alle velden in'
+          )}
         </button>
       </div>
     </>

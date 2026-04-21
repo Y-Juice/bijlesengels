@@ -3,35 +3,34 @@
   width: 100%;
 }
 
-.MobileNav { 
-  display: none; 
-  position: fixed; 
-  bottom: 20px; 
-  left: 20px; 
-  right: 20px; 
-  background: var(--color-surface);
-  border-radius: var(--radius-lg); 
-  padding: 12px; 
-  box-shadow: var(--shadow-xl); 
-  z-index: 100; 
+.MobileNav {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  background: var(--color-palm);
+  border-radius: var(--radius-lg);
+  padding: 10px;
+  box-shadow: var(--shadow-xl);
+  z-index: 100;
   justify-content: space-around;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(99,102,241,0.2);
+  border: 2px solid var(--color-palm-dark);
 }
 
-.MobileNav__link { 
-  text-decoration: none; 
-  color: var(--color-text);
+.MobileNav__link {
+  text-decoration: none;
+  color: var(--color-serenade);
   font-weight: 700;
   font-size: 14px;
-  padding: 10px 16px;
+  padding: 10px 14px;
   border-radius: var(--radius-md);
   transition: all 0.2s ease;
 }
 
 .MobileNav__link:hover {
-  background: rgba(99,102,241,0.1);
-  color: var(--color-primary);
+  background: var(--color-fringy);
+  color: var(--color-palm);
 }
 
 @media (max-width: 900px) {

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { FiLogIn, FiLogOut, FiUser } from 'react-icons/fi';
 import '../styles/Header.css';
 import AuthModal from './auth/AuthModal';
 import { signOut, getCurrentUserFromStorage } from '../services/storage';
@@ -36,11 +37,18 @@ function Header({ currentUser, onAuthChange }) {
       </nav>
       <div className="Header__auth">
         {!currentUser ? (
-          <button className="btn btn-primary" onClick={() => setShowAuth(true)}>Log in / Registreer</button>
+          <button className="btn btn-primary" onClick={() => setShowAuth(true)}>
+            <FiLogIn aria-hidden="true" /> Log in / Registreer
+          </button>
         ) : (
           <div className="Header__user">
-            <span className="Header__welcome">{currentUser.role === 'admin' ? 'Host' : 'Ouder'}</span>
-            <button className="btn" onClick={handleLogout}>Uitloggen</button>
+            <span className="Header__welcome">
+              <FiUser aria-hidden="true" />
+              {currentUser.role === 'admin' ? 'Host' : 'Ouder'}
+            </span>
+            <button className="btn" onClick={handleLogout}>
+              <FiLogOut aria-hidden="true" /> Uitloggen
+            </button>
           </div>
         )}
       </div>

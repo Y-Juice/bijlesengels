@@ -1,4 +1,5 @@
 import React from 'react';
+import { FiGlobe, FiClock, FiCheck, FiArrowRight } from 'react-icons/fi';
 import '../styles/Home.css';
 import introsection from '../assets/introsection.jpg';
 import teaching from '../assets/teaching.jpg';
@@ -12,12 +13,24 @@ function Home() {
           <h1 className="Hero__title">Bijlessen Engels</h1>
           <p className="Hero__subtitle">Voor leerlingen 1ste tot en met 4de secundair (ASO, TSO &amp; BSO)</p>
           <ul className="Hero__bullets">
-            <li>Via Microsoft Teams of bij de leerling thuis (verplaatsingskosten komen erbij)</li>
-            <li>Flexibele uren tijdens schoolvakanties</li>
-            <li>1 uur (€25) of 2 uur (€40) per leerling</li>
+            <li>
+              <FiCheck className="Hero__bulletIcon" aria-hidden="true" />
+              <span>Via Microsoft Teams of bij de leerling thuis (verplaatsingskosten komen erbij)</span>
+            </li>
+            <li>
+              <FiCheck className="Hero__bulletIcon" aria-hidden="true" />
+              <span>Flexibele uren tijdens schoolvakanties</span>
+            </li>
+            <li>
+              <FiCheck className="Hero__bulletIcon" aria-hidden="true" />
+              <span>1 uur (€25) of 2 uur (€40) per leerling</span>
+            </li>
           </ul>
           <div className="Hero__cta">
-            <a className="btn btn-primary" href="#/register">Inschrijven</a>
+            <a className="btn btn-primary" href="#/register">
+              Inschrijven
+              <FiArrowRight aria-hidden="true" />
+            </a>
           </div>
         </div>
         <div className="Hero__art">
@@ -54,7 +67,8 @@ function Home() {
             </p>
             <div className="InfoHero__contactInfo">
               <div className="InfoHero__contactItem">
-                <strong>🌐 Website:</strong>
+                <FiGlobe className="InfoHero__contactIcon" aria-hidden="true" />
+                <strong>Website:</strong>
                 <a href="https://www.bijlesengels.be" target="_blank" rel="noopener noreferrer">www.bijlesengels.be</a>
               </div>
             </div>
@@ -89,9 +103,12 @@ function Home() {
                 <p>Ideaal voor uitgebreide begeleiding en oefening</p>
               </div>
             </div>
-            <p className="InfoHero__description">
-              <strong>Let op:</strong> Maximaal 2 uur per dag per leerling om de kwaliteit
-              en concentratie te waarborgen. Bij lessen thuis komen er verplaatsingskosten bij.
+            <p className="InfoHero__description InfoHero__notice">
+              <FiClock className="InfoHero__noticeIcon" aria-hidden="true" />
+              <span>
+                <strong>Let op:</strong> Maximaal 2 uur per dag per leerling om de kwaliteit
+                en concentratie te waarborgen. Bij lessen thuis komen er verplaatsingskosten bij.
+              </span>
             </p>
           </div>
         </div>

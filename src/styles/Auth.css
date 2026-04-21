@@ -66,9 +66,14 @@
   transition: all 0.2s ease;
 }
 
+.Modal__close svg {
+  width: 18px;
+  height: 18px;
+}
+
 .Modal__close:hover {
-  background: var(--color-error);
-  color: white;
+  background: var(--color-palm);
+  color: var(--color-serenade);
   transform: rotate(90deg);
 }
 
@@ -94,9 +99,9 @@
   transition: all 0.2s ease;
 }
 
-.tab.active { 
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
-  color: white;
+.tab.active {
+  background: var(--color-palm);
+  color: var(--color-fringy);
   box-shadow: var(--shadow-sm);
 }
 
@@ -117,20 +122,23 @@
   font-size: 14px;
 }
 
-.AuthForm input { 
-  padding: 14px 16px; 
-  border: 2px solid rgba(99,102,241,0.2);
-  border-radius: var(--radius-md); 
+.AuthForm input,
+.AuthForm select {
+  padding: 14px 16px;
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
   font-size: 15px;
   transition: all 0.2s ease;
-  background: var(--color-bg);
+  background: var(--color-surface);
   color: var(--color-text);
+  font-family: var(--font-body);
 }
 
-.AuthForm input:focus {
+.AuthForm input:focus,
+.AuthForm select:focus {
   outline: none;
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(99,102,241,0.1);
+  border-color: var(--color-palm);
+  box-shadow: 0 0 0 3px rgba(137, 201, 201, 0.35);
 }
 
 .AuthForm input::placeholder {
@@ -158,8 +166,17 @@
 }
 
 .error::before {
-  content: '⚠️';
-  font-size: 18px;
+  content: '!';
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: var(--color-error);
+  color: #fff;
+  font-weight: 800;
+  font-size: 14px;
 }
 
 .success {
@@ -176,8 +193,14 @@
 }
 
 .success::before {
-  content: '✅';
-  font-size: 18px;
+  content: '';
+  display: inline-block;
+  width: 10px;
+  height: 18px;
+  border: solid #3b8a5c;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+  margin: 0 6px 4px 2px;
 }
 
 .AuthForm__title {

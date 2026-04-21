@@ -1,26 +1,48 @@
-.Admin { 
+.Admin {
   padding: 0;
   color: var(--color-text);
 }
 
-.Admin h2 {
+.Admin__title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
   font-size: 2rem;
-  margin-bottom: 8px;
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  margin-bottom: 12px;
+  color: var(--color-palm);
 }
 
-.hint { 
-  color: var(--color-text-light); 
+.Admin__title svg {
+  color: var(--color-palm);
+  width: 28px;
+  height: 28px;
+}
+
+.hint {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  color: var(--color-text-light);
   font-size: 14px;
-  background: rgba(99,102,241,0.05);
-  padding: 12px 16px;
+  background: var(--color-sail);
+  color: var(--color-palm);
+  padding: 14px 18px;
   border-radius: var(--radius-md);
-  border-left: 4px solid var(--color-primary);
   margin-bottom: 24px;
   line-height: 1.6;
+}
+
+.hint__icon {
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+  color: var(--color-palm);
+  margin-top: 2px;
+}
+
+.hint strong {
+  color: var(--color-palm);
+  font-weight: 700;
 }
 
 .Admin__controls {
@@ -30,22 +52,25 @@
   margin-bottom: 24px;
   padding: 20px;
   background: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
 }
 
 .Admin__controls button {
-  padding: 10px 20px;
+  padding: 10px 18px;
   font-size: 14px;
 }
 
-.Actions { 
-  margin-top: 24px; 
-  display: flex; 
+.Actions {
+  margin-top: 24px;
+  display: flex;
   justify-content: flex-end;
+  align-items: center;
   gap: 12px;
   padding: 20px;
   background: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
 }
@@ -59,10 +84,11 @@
 
 .Admin__stat {
   background: var(--color-surface);
-  padding: 20px;
+  padding: 22px;
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
-  border-left: 4px solid var(--color-primary);
+  border: 1px solid var(--color-border);
+  border-left: 6px solid var(--color-palm);
 }
 
 .Admin__stat h3 {
@@ -70,13 +96,15 @@
   text-transform: uppercase;
   color: var(--color-text-light);
   margin-bottom: 8px;
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  font-family: var(--font-body);
 }
 
 .Admin__stat p {
   font-size: 2rem;
-  font-weight: 700;
-  color: var(--color-primary);
+  font-weight: 900;
+  color: var(--color-palm);
   margin: 0;
+  font-family: var(--font-display);
 }
-

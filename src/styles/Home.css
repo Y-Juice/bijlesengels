@@ -1,14 +1,15 @@
-.Home { 
+.Home {
   padding: 0;
   max-width: 100%;
 }
 
-.Hero { 
-  display: grid; 
-  grid-template-columns: 1fr; 
-  gap: 32px; 
-  padding: 40px 20px;
-  background: linear-gradient(135deg, rgba(99,102,241,0.05) 0%, rgba(236,72,153,0.05) 100%);
+.Hero {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+  padding: 48px 28px;
+  background: var(--color-palm);
+  color: var(--color-serenade);
   border-radius: var(--radius-lg);
   margin-bottom: 40px;
 }
@@ -16,92 +17,117 @@
 .Hero__text {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 18px;
 }
 
-.Hero__title { 
-  font-size: clamp(2rem, 5vw, 3.5rem);
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+.Hero__title {
+  font-family: var(--font-display);
+  font-size: clamp(2.25rem, 5vw, 3.75rem);
+  color: var(--color-serenade);
   margin: 0;
-  font-weight: 800;
-  line-height: 1.1;
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
 }
 
-.Hero__subtitle { 
-  color: var(--color-text-light);
-  font-weight: 600; 
-  font-size: 1.25rem;
+.Hero__subtitle {
+  color: var(--color-sail);
+  font-weight: 600;
+  font-size: 1.15rem;
   margin: 0;
 }
 
-.Hero__bullets { 
+.Hero__bullets {
   list-style: none;
   padding: 0;
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
 .Hero__bullets li {
   display: flex;
   align-items: center;
   gap: 12px;
-  color: var(--color-text);
+  color: var(--color-serenade);
   font-weight: 500;
   padding: 12px 16px;
-  background: var(--color-surface);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: var(--radius-md);
-  box-shadow: var(--shadow-sm);
 }
 
-.Hero__bullets li::before {
-  content: '✨';
-  font-size: 1.2rem;
+.Hero__bulletIcon {
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+  color: var(--color-fringy);
 }
 
-.Hero__cta { 
-  margin-top: 8px; 
+.Hero__cta {
+  margin-top: 12px;
 }
 
-.Hero__art { 
+.Hero__cta .btn-primary {
+  background: var(--color-fringy);
+  color: var(--color-palm);
+  border-color: var(--color-fringy);
+}
+
+.Hero__cta .btn-primary:hover {
+  background: var(--color-fringy-dark);
+  color: var(--color-palm);
+}
+
+.Hero__art {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.Hero__art img { 
-  width: 100%; 
+.Hero__art img {
+  width: 100%;
   max-width: 500px;
-  border-radius: var(--radius-lg); 
+  border-radius: var(--radius-lg);
   box-shadow: var(--shadow-xl);
   transition: transform 0.3s ease;
 }
 
 .Hero__art img:hover {
-  transform: scale(1.02) rotate(1deg);
+  transform: scale(1.02) rotate(0.5deg);
 }
 
 .InfoHero {
-  margin: 60px 0;
-  padding: 40px 20px;
-  background: linear-gradient(135deg, rgba(99,102,241,0.03) 0%, rgba(236,72,153,0.03) 100%);
+  margin: 56px 0;
+  padding: 40px 24px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
 }
 
 .InfoHero--about {
-  background: linear-gradient(135deg, rgba(99,102,241,0.05) 0%, rgba(236,72,153,0.05) 100%);
+  background: var(--color-surface);
 }
 
 .InfoHero--contact {
-  background: linear-gradient(135deg, rgba(236,72,153,0.05) 0%, rgba(99,102,241,0.05) 100%);
+  background: var(--color-sail);
+  color: var(--color-palm);
+}
+
+.InfoHero--contact .InfoHero__title,
+.InfoHero--contact .InfoHero__description {
+  color: var(--color-palm);
 }
 
 .InfoHero--pricing {
-  background: linear-gradient(135deg, rgba(16,185,129,0.05) 0%, rgba(99,102,241,0.05) 100%);
+  background: var(--color-fringy);
+  color: var(--color-palm);
+}
+
+.InfoHero--pricing .InfoHero__title,
+.InfoHero--pricing .InfoHero__description {
+  color: var(--color-palm);
 }
 
 .InfoHero__content {
@@ -128,26 +154,42 @@
 }
 
 .InfoHero__title {
-  font-size: clamp(1.75rem, 4vw, 2.5rem);
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  font-family: var(--font-display);
+  font-size: clamp(1.85rem, 4vw, 2.75rem);
+  color: var(--color-palm);
   margin: 0;
   font-weight: 800;
-  line-height: 1.2;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
 }
 
 .InfoHero__description {
   color: var(--color-text-light);
-  line-height: 1.8;
-  font-size: 1.1rem;
+  line-height: 1.7;
+  font-size: 1.05rem;
   margin: 0;
 }
 
 .InfoHero__description strong {
   color: var(--color-text);
-  font-weight: 600;
+  font-weight: 700;
+}
+
+.InfoHero__notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 18px;
+  background: rgba(2, 38, 30, 0.08);
+  border-radius: var(--radius-md);
+}
+
+.InfoHero__noticeIcon {
+  flex: 0 0 auto;
+  width: 22px;
+  height: 22px;
+  color: var(--color-palm);
+  margin-top: 2px;
 }
 
 .InfoHero__image {
@@ -177,16 +219,22 @@
 
 .InfoHero__contactItem {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 16px;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 18px;
   background: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  box-shadow: var(--shadow-sm);
+}
+
+.InfoHero__contactIcon {
+  color: var(--color-palm);
+  width: 20px;
+  height: 20px;
 }
 
 .InfoHero__contactItem strong {
-  color: var(--color-primary);
+  color: var(--color-palm);
   font-size: 1rem;
 }
 
@@ -195,10 +243,12 @@
   text-decoration: none;
   font-weight: 600;
   transition: color 0.2s ease;
+  margin-left: auto;
 }
 
 .InfoHero__contactItem a:hover {
-  color: var(--color-primary);
+  color: var(--color-palm-light);
+  text-decoration: underline;
 }
 
 .InfoHero__pricing {
@@ -214,49 +264,57 @@
   padding: 32px;
   text-align: center;
   box-shadow: var(--shadow-md);
-  border: 2px solid transparent;
+  border: 2px solid var(--color-palm);
   transition: all 0.3s ease;
   position: relative;
+  color: var(--color-palm);
 }
 
 .InfoHero__priceCard:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow-lg);
-  border-color: var(--color-primary-light);
 }
 
 .InfoHero__priceCard--popular {
-  border-color: var(--color-primary-light);
-  background: linear-gradient(135deg, rgba(99,102,241,0.05) 0%, rgba(236,72,153,0.05) 100%);
+  background: var(--color-palm);
+  color: var(--color-serenade);
+}
+
+.InfoHero__priceCard--popular .InfoHero__priceAmount,
+.InfoHero__priceCard--popular .InfoHero__priceLabel,
+.InfoHero__priceCard--popular p {
+  color: var(--color-serenade);
 }
 
 .InfoHero__priceBadge {
   position: absolute;
-  top: -12px;
+  top: -14px;
   right: 20px;
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
-  color: white;
+  background: var(--color-fringy);
+  color: var(--color-palm);
   padding: 6px 16px;
   border-radius: var(--radius-xl);
   font-size: 0.75rem;
-  font-weight: 700;
-  box-shadow: var(--shadow-md);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border: 2px solid var(--color-palm);
 }
 
 .InfoHero__priceAmount {
-  font-size: 3rem;
-  font-weight: 800;
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  font-family: var(--font-display);
+  font-size: 3.25rem;
+  font-weight: 900;
+  color: var(--color-palm);
   margin: 8px 0;
+  letter-spacing: -0.02em;
 }
 
 .InfoHero__priceLabel {
   color: var(--color-text-light);
   font-size: 1rem;
   margin-bottom: 16px;
+  font-weight: 600;
 }
 
 .InfoHero__priceCard p {
@@ -266,15 +324,15 @@
 }
 
 @media (min-width: 900px) {
-  .Hero { 
-    grid-template-columns: 1.2fr 1fr; 
-    padding: 60px 40px;
+  .Hero {
+    grid-template-columns: 1.2fr 1fr;
+    padding: 70px 48px;
   }
-  
+
   .InfoHero {
-    padding: 60px 40px;
+    padding: 64px 48px;
   }
-  
+
   .InfoHero__content {
     grid-template-columns: 1fr 1fr;
     gap: 48px;
@@ -283,13 +341,8 @@
   .InfoHero--pricing .InfoHero__content {
     grid-template-columns: 1fr;
   }
-  
+
   .InfoHero__pricing {
     grid-template-columns: repeat(2, 1fr);
   }
-  
-  .InfoHero__contactInfo {
-    flex-direction: row;
-  }
 }
-

@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { FiCheckCircle, FiEdit2, FiCalendar, FiInfo, FiCheck } from 'react-icons/fi';
 import '../styles/Register.css';
 import Calendar from '../shared/Calendar';
 import { getAvailability, getRegistrations, updateRegistration, getCurrentUserFromStorage } from '../services/storage';
@@ -68,7 +69,7 @@ function EditRegistration() {
     return (
       <div className="Register">
         <div className="card" style={{textAlign: 'center', padding: '48px 32px'}}>
-          <div style={{fontSize: '4rem', marginBottom: '16px'}}>✅</div>
+          <FiCheckCircle style={{fontSize: '4rem', marginBottom: '16px', color: 'var(--color-palm)'}} aria-hidden="true" />
           <h2>Inschrijving bijgewerkt!</h2>
           <p style={{marginTop: '12px', marginBottom: '24px', fontSize: '16px'}}>
             Je wijzigingen zijn opgeslagen en worden opnieuw beoordeeld door de admin.
@@ -81,7 +82,10 @@ function EditRegistration() {
 
   return (
     <div className="Register">
-      <h2>✏️ Inschrijving bewerken</h2>
+      <h2 className="Register__sectionTitle">
+        <FiEdit2 aria-hidden="true" />
+        <span>Inschrijving bewerken</span>
+      </h2>
       <form className="Form" onSubmit={save}>
         <div className="Form__grid">
           {['parentName','parentPhone','parentEmail','studentName','studentAge','studentLeerjaar','studentStudierichting'].map((key) => (
@@ -107,10 +111,16 @@ function EditRegistration() {
           </label>
         </div>
         <div className="CalendarSection">
-          <h3>📅 Pas je lesblokken aan</h3>
+          <h3 className="Register__sectionTitle">
+            <FiCalendar aria-hidden="true" />
+            <span>Pas je lesblokken aan</span>
+          </h3>
           <p className="hint">
-            <strong>💡 Tip:</strong> Klik op beschikbare tijdstippen om ze te selecteren. 
-            Je kunt meerdere uren selecteren, maar maximaal 2 per dag.
+            <FiInfo className="hint__icon" aria-hidden="true" />
+            <span>
+              <strong>Tip:</strong> Klik op beschikbare tijdstippen om ze te selecteren.
+              Je kunt meerdere uren selecteren, maar maximaal 2 per dag.
+            </span>
           </p>
           {selectedSlots.length > 0 && (
             <div style={{
@@ -120,7 +130,8 @@ function EditRegistration() {
               marginBottom: '20px',
               border: '2px solid rgba(16,185,129,0.3)'
             }}>
-              <strong>✓ {selectedSlots.length} tijdstip{selectedSlots.length !== 1 ? 'pen' : ''} geselecteerd</strong>
+              <FiCheck aria-hidden="true" style={{marginRight: '8px', verticalAlign: '-2px'}} />
+              <strong>{selectedSlots.length} tijdstip{selectedSlots.length !== 1 ? 'pen' : ''} geselecteerd</strong>
             </div>
           )}
           <Calendar
@@ -135,7 +146,7 @@ function EditRegistration() {
             Annuleren
           </button>
           <button className="btn btn-primary" disabled={!canSubmit} type="submit">
-            {canSubmit ? 'Opslaan ✨' : 'Selecteer minimaal 1 tijdstip'}
+            {canSubmit ? 'Opslaan' : 'Selecteer minimaal 1 tijdstip'}
           </button>
         </div>
       </form>
