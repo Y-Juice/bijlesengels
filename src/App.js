@@ -72,7 +72,7 @@ function App() {
           {view}
         </main>
       </div>
-      <MobileNav currentUser={currentUser} />
+      <MobileNav currentUser={currentUser} onAuthChange={setCurrentUser} />
       <footer className="Footer">© {new Date().getFullYear()} bijlesengels</footer>
     </div>
   );

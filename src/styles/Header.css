@@ -122,22 +122,6 @@
 
 @media (max-width: 900px) {
   .Header {
-    flex-wrap: wrap;
-    gap: 12px;
-  }
-
-  .Header__nav {
-    order: 3;
-    width: 100%;
-    justify-content: flex-start;
-    margin-top: 8px;
-  }
-
-  .Header__brand {
-    flex: 1;
-  }
-
-  .Header__auth {
-    order: 2;
+    display: none;
   }
 }
