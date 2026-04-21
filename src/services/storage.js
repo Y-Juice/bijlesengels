@@ -9,11 +9,6 @@ function normalizeRole(role) {
   return cleanedRole === 'admin' ? 'admin' : 'parent';
 }
 
-function isAdminEmail(email) {
-  if (!email) return false;
-  return ADMIN_EMAILS.includes(String(email).trim().toLowerCase());
-}
-
 async function getProfileForAuthUser(user) {
   const { data: profileById, error: byIdError } = await supabase
     .from('profiles')
@@ -76,16 +71,12 @@ export async function getCurrentUserFromStorage() {
         return null;
       }
       const user = sessionData.data.session.user;
-      if (isAdminEmail(user.email)) {
-        return { id: user.id, email: user.email, role: 'admin' };
-      }
       const { profile, error: pErr } = await getProfileForAuthUser(user);
       if (pErr) {
         console.error('getCurrentUserFromStorage profile error', pErr);
-        // still return basic user
-        return { id: user.id, email: user.email, role: normalizeRole(user.user_metadata?.role) };
+        return { id: user.id, email: user.email, role: 'parent' };
       }
-      return { id: user.id, email: user.email, ...profile, role: normalizeRole(profile?.role || user.user_metadata?.role) };
+      return { id: user.id, email: user.email, ...profile, role: normalizeRole(profile?.role) };
     } catch (e) {
       console.error('getCurrentUserFromStorage supabase error', e);
       return null;
@@ -118,13 +109,10 @@ export async function signIn(identifier, password) {
         return { ok: false, reason: 'unknown' };
       }
       const user = data.user;
-      if (isAdminEmail(user.email)) {
-        return { ok: true, user: { id: user.id, email: user.email, role: 'admin' } };
-      }
       const { profile } = await getProfileForAuthUser(user);
       return {
         ok: true,
-        user: { id: user.id, email: user.email, ...profile, role: normalizeRole(profile?.role || user.user_metadata?.role) }
+        user: { id: user.id, email: user.email, ...profile, role: normalizeRole(profile?.role) }
       };
     } catch (e) {
       console.error('signIn supabase error', e);
@@ -209,10 +197,6 @@ export async function signOut() {
 
 const SUPABASE_URL = process.env.REACT_APP_SUPABASE_URL;
 const SUPABASE_KEY = process.env.REACT_APP_SUPABASE_KEY;
-const ADMIN_EMAILS = String(process.env.REACT_APP_ADMIN_EMAILS || '')
-  .split(',')
-  .map((email) => email.trim().toLowerCase())
-  .filter(Boolean);
 const useSupabase = !!(SUPABASE_URL && SUPABASE_KEY);
 let supabase = null;
 if (useSupabase) {
