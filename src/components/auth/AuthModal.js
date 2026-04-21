@@ -143,6 +143,10 @@ function AuthModal({ onClose, onAuthChange }) {
           setError('Te veel pogingen. Wacht 15 seconden en probeer opnieuw.');
           return;
         }
+        if (result?.reason === 'email_rate_limit') {
+          setError('De mail-limiet voor vandaag is bereikt. Probeer het later opnieuw of neem contact op.');
+          return;
+        }
         if (result?.reason === 'already_exists') {
           setError('Gebruikersnaam of e-mailadres bestaat al. Probeer een andere combinatie.');
           return;

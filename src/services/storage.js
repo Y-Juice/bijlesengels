@@ -131,11 +131,24 @@ export async function signIn(identifier, password) {
 export async function signUp(user) {
   if (useSupabase) {
     try {
-      // create auth user
-      const { data, error } = await supabase.auth.signUp({ email: user.email, password: user.password });
-      if (error) { 
+      const role = normalizeRole(user.role);
+      const { data, error } = await supabase.auth.signUp({
+        email: user.email,
+        password: user.password,
+        options: {
+          data: {
+            name: user.name,
+            username: user.username,
+            role
+          }
+        }
+      });
+      if (error) {
         console.error('supabase signUp error', error);
         const errorMessage = String(error.message || '').toLowerCase();
+        if (errorMessage.includes('email rate limit')) {
+          return { ok: false, reason: 'email_rate_limit' };
+        }
         if (error.status === 429 || errorMessage.includes('15 seconds') || errorMessage.includes('request this after')) {
           return { ok: false, reason: 'rate_limit' };
         }
@@ -144,28 +157,15 @@ export async function signUp(user) {
         }
         return { ok: false, reason: 'unknown' };
       }
-      const uid = data.user?.id || data?.user?.id;
+      const uid = data.user?.id;
       if (!uid) {
         console.error('No user ID returned from signUp');
         return { ok: false, reason: 'unknown' };
       }
-      // insert profile row
-      const profile = {
-        id: uid,
-        name: user.name,
-        phone: user.phone,
-        username: user.username,
-        role: normalizeRole(user.role),
-        email: user.email
+      return {
+        ok: true,
+        user: { id: uid, email: user.email, name: user.name, username: user.username, role }
       };
-      const { error: pErr } = await supabase.from('profiles').insert([profile]);
-      if (pErr) {
-        console.error('supabase insert profile error', pErr);
-        // Try to delete the auth user if profile creation fails
-        await supabase.auth.admin.deleteUser(uid).catch(() => {});
-        return { ok: false, reason: 'unknown' };
-      }
-      return { ok: true, user: { id: uid, ...profile } };
     } catch (e) {
       console.error('signUp supabase error', e);
       return { ok: false, reason: 'unknown' };
