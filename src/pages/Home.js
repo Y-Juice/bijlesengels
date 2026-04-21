@@ -10,11 +10,11 @@ function Home() {
       <section className="Hero">
         <div className="Hero__text">
           <h1 className="Hero__title">Bijlessen Engels</h1>
-          <p className="Hero__subtitle">Voor leerlingen 1ste tot en met 3de secundair</p>
+          <p className="Hero__subtitle">Voor leerlingen 1ste tot en met 4de secundair (ASO, TSO &amp; BSO)</p>
           <ul className="Hero__bullets">
-            <li>Volledig online via Zoom</li>
+            <li>Via Microsoft Teams of bij de leerling thuis (verplaatsingskosten komen erbij)</li>
             <li>Flexibele uren tijdens schoolvakanties</li>
-            <li>1 uur (€20) of 2 uur (€30)</li>
+            <li>1 uur (€25) of 2 uur (€40) per leerling</li>
           </ul>
           <div className="Hero__cta">
             <a className="btn btn-primary" href="#/register">Inschrijven</a>
@@ -57,14 +57,10 @@ function Home() {
                 <strong>🌐 Website:</strong>
                 <a href="https://www.bijlesengels.be" target="_blank" rel="noopener noreferrer">www.bijlesengels.be</a>
               </div>
-              <div className="InfoHero__contactItem">
-                <strong>📱 WhatsApp:</strong>
-                <a href="https://wa.me/32483996769" target="_blank" rel="noopener noreferrer">+32 483 99 67 69</a>
-              </div>
             </div>
             <p className="InfoHero__description">
-              Ik reageer meestal binnen 24 uur op je bericht. Voor dringende vragen kun je me 
-              altijd via WhatsApp bereiken.
+              Alle contact en inschrijvingen verlopen via deze website. Ik reageer meestal
+              binnen 24 uur op je bericht.
             </p>
           </div>
           <div className="InfoHero__image">
@@ -82,20 +78,20 @@ function Home() {
             </p>
             <div className="InfoHero__pricing">
               <div className="InfoHero__priceCard">
-                <div className="InfoHero__priceAmount">€20</div>
-                <div className="InfoHero__priceLabel">per uur</div>
+                <div className="InfoHero__priceAmount">€25</div>
+                <div className="InfoHero__priceLabel">per uur / leerling</div>
                 <p>Perfect voor gerichte hulp bij specifieke onderwerpen</p>
               </div>
               <div className="InfoHero__priceCard InfoHero__priceCard--popular">
                 <div className="InfoHero__priceBadge">Populair</div>
-                <div className="InfoHero__priceAmount">€30</div>
-                <div className="InfoHero__priceLabel">per 2 uur</div>
+                <div className="InfoHero__priceAmount">€40</div>
+                <div className="InfoHero__priceLabel">per 2 uur / leerling</div>
                 <p>Ideaal voor uitgebreide begeleiding en oefening</p>
               </div>
             </div>
             <p className="InfoHero__description">
-              <strong>Let op:</strong> Maximaal 2 uur per dag per leerling om de kwaliteit 
-              en concentratie te waarborgen.
+              <strong>Let op:</strong> Maximaal 2 uur per dag per leerling om de kwaliteit
+              en concentratie te waarborgen. Bij lessen thuis komen er verplaatsingskosten bij.
             </p>
           </div>
         </div>

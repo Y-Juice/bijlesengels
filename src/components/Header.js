@@ -39,7 +39,7 @@ function Header({ currentUser, onAuthChange }) {
           <button className="btn btn-primary" onClick={() => setShowAuth(true)}>Log in / Registreer</button>
         ) : (
           <div className="Header__user">
-            <span className="Header__welcome">{currentUser.role === 'admin' ? 'Admin' : 'Ouder'}</span>
+            <span className="Header__welcome">{currentUser.role === 'admin' ? 'Host' : 'Ouder'}</span>
             <button className="btn" onClick={handleLogout}>Uitloggen</button>
           </div>
         )}

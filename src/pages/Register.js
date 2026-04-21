@@ -5,7 +5,6 @@ import { getAvailability, addRegistration, getCurrentUserFromStorage } from '../
 
 const initialForm = {
   parentName: '',
-  parentPhone: '',
   parentEmail: '',
   studentName: '',
   studentAge: '',
@@ -44,7 +43,7 @@ function Register({ currentUser, onAuthChange }) {
 
   const canSubmit = useMemo(() => {
     return (
-      form.parentName && form.parentPhone && form.parentEmail && form.studentName &&
+      form.parentName && form.parentEmail && form.studentName &&
       form.studentAge && form.studentLeerjaar && form.studentStudierichting &&
       selectedSlots.length > 0
     );
@@ -141,16 +140,6 @@ function Register({ currentUser, onAuthChange }) {
             />
           </label>
           <label>
-            <span>Telefoon ouder/voogd *</span>
-            <input 
-              name="parentPhone" 
-              value={form.parentPhone} 
-              onChange={handleChange}
-              placeholder="+32 123 45 67 89"
-              required 
-            />
-          </label>
-          <label>
             <span>E-mail ouder/voogd *</span>
             <input 
               type="email" 
@@ -186,23 +175,32 @@ function Register({ currentUser, onAuthChange }) {
           </label>
           <label>
             <span>Leerjaar *</span>
-            <input 
+            <select 
               name="studentLeerjaar" 
               value={form.studentLeerjaar} 
               onChange={handleChange}
-              placeholder="1ste secundair"
-              required 
-            />
+              required
+            >
+              <option value="">Kies leerjaar</option>
+              <option value="1ste secundair">1ste secundair</option>
+              <option value="2de secundair">2de secundair</option>
+              <option value="3de secundair">3de secundair</option>
+              <option value="4de secundair">4de secundair</option>
+            </select>
           </label>
           <label>
             <span>Studierichting *</span>
-            <input 
+            <select 
               name="studentStudierichting" 
               value={form.studentStudierichting} 
               onChange={handleChange}
-              placeholder="ASO"
-              required 
-            />
+              required
+            >
+              <option value="">Kies richting</option>
+              <option value="ASO">ASO</option>
+              <option value="TSO">TSO</option>
+              <option value="BSO">BSO</option>
+            </select>
           </label>
           <label>
             <span>Meerdere kinderen?</span>
@@ -215,9 +213,9 @@ function Register({ currentUser, onAuthChange }) {
         <div className="CalendarSection">
           <h3>📅 Kies je lesblokken</h3>
           <p className="hint">
-            <strong>💡 Tip:</strong> Klik op beschikbare tijdstippen om ze te selecteren. 
-            Je kunt meerdere uren selecteren, maar maximaal 2 per dag. 
-            Groen = beschikbaar, rood = bezet, grijs = niet beschikbaar.
+            <strong>💡 Tip:</strong> Hieronder zie je alleen de tijdstippen die de host 
+            als beschikbaar heeft ingesteld. Klik om een uur te kiezen. 
+            Je kunt meerdere uren selecteren, maar maximaal 2 per dag.
           </p>
           {selectedSlots.length > 0 && (
             <div style={{
@@ -235,6 +233,7 @@ function Register({ currentUser, onAuthChange }) {
             selectedSlots={selectedSlots}
             onChangeSelected={setSelectedSlots}
             readOnly={false}
+            onlyAvailable
           />
         </div>
       </form>

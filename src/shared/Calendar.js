@@ -26,7 +26,8 @@ function Calendar({
   adminEdit,
   maxSelect,
   maxPerDay = 2,
-  daysToShow = 14
+  daysToShow = 14,
+  onlyAvailable = false
 }) {
   const [hover, setHover] = useState(null);
   const [modalRegs, setModalRegs] = useState(null);
@@ -92,13 +93,19 @@ function Calendar({
         {days.map((d) => {
           const weekdayIdx = weekdayIndexFromDate(d);
           const dateStr = d.toISOString().slice(0, 10);
+          const hoursForDay = onlyAvailable
+            ? HOURS.filter((h) => isAvailable(slotId(weekdayIdx, h)) && !isOccupied(slotId(weekdayIdx, h)))
+            : HOURS;
+          if (onlyAvailable && hoursForDay.length === 0) {
+            return null;
+          }
           return (
             <div key={dateStr} className="Calendar__day">
               <div className="Calendar__dayHeader">
                 <div className="Calendar__dayLabel">{DAYS[weekdayIdx]} {dateStr}</div>
               </div>
               <div className="Calendar__daySlots">
-                {HOURS.map((h) => {
+                {hoursForDay.map((h) => {
                   const id = slotId(weekdayIdx, h);
                   const classes = ['Calendar__slot', 'Calendar__slot--agenda'];
                   if (isAvailable(id)) classes.push('available');

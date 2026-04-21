@@ -7,7 +7,6 @@ function AuthModal({ onClose, onAuthChange }) {
   const [form, setForm] = useState({
     name: '',
     email: '',
-    phone: '',
     username: '',
     password: ''
   });
@@ -48,7 +47,7 @@ function AuthModal({ onClose, onAuthChange }) {
     if (isSubmitting) return;
     
     // Validation
-    if (!form.name || !form.email || !form.phone || !form.username || !form.password) {
+    if (!form.name || !form.email || !form.username || !form.password) {
       setError('Vul alle velden in');
       return;
     }
@@ -68,7 +67,6 @@ function AuthModal({ onClose, onAuthChange }) {
       const result = await signUp({
         name: form.name,
         email: form.email,
-        phone: form.phone,
         username: form.username,
         password: form.password,
         role: 'parent'
@@ -160,16 +158,6 @@ function AuthModal({ onClose, onAuthChange }) {
                 onChange={handleChange}
                 placeholder="jan@voorbeeld.nl"
                 autoComplete="email"
-              />
-            </label>
-            <label>
-              <span>Telefoonnummer</span>
-              <input 
-                name="phone" 
-                value={form.phone} 
-                onChange={handleChange}
-                placeholder="+32 123 45 67 89"
-                autoComplete="tel"
               />
             </label>
             <label>
