@@ -213,12 +213,40 @@ export async function signOut() {
   return true;
 }
 
-const SUPABASE_URL = process.env.REACT_APP_SUPABASE_URL;
-const SUPABASE_KEY = process.env.REACT_APP_SUPABASE_KEY;
+function stripQuotes(s) {
+  const v = String(s || '').trim();
+  if ((v.startsWith('"') && v.endsWith('"')) || (v.startsWith("'") && v.endsWith("'"))) {
+    return v.slice(1, -1).trim();
+  }
+  return v;
+}
+
+const SUPABASE_URL = stripQuotes(process.env.REACT_APP_SUPABASE_URL);
+const SUPABASE_KEY = stripQuotes(
+  process.env.REACT_APP_SUPABASE_ANON_KEY || process.env.REACT_APP_SUPABASE_KEY
+);
+
+/** Publishable keys are not JWTs; supabase-js sends Authorization: Bearer <key> when logged out, which GoTrue rejects. */
+function fetchWithoutBearerPublishablePlaceholder(supabaseKey) {
+  const key = String(supabaseKey || '');
+  if (!key.startsWith('sb_publishable_')) {
+    return (...args) => fetch(...args);
+  }
+  return async (input, init) => {
+    const headers = new Headers(init?.headers);
+    if (headers.get('Authorization') === `Bearer ${key}`) {
+      headers.delete('Authorization');
+    }
+    return fetch(input, { ...init, headers });
+  };
+}
+
 const useSupabase = !!(SUPABASE_URL && SUPABASE_KEY);
 let supabase = null;
 if (useSupabase) {
-  supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+  supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
+    global: { fetch: fetchWithoutBearerPublishablePlaceholder(SUPABASE_KEY) },
+  });
 }
 
 // Availability stored in table `availability` with columns: slot (primary key), status
@@ -329,11 +357,11 @@ export async function addRegistration(reg) {
   try {
     const id = `r_${Date.now()}`;
     // Map JavaScript camelCase to database snake_case
-    const payload = { 
+    const payload = {
       id,
       user_id: reg.userId,
       parent_name: reg.parentName,
-      parent_phone: reg.parentPhone,
+      parent_phone: String(reg.parentPhone ?? '').trim(),
       parent_email: reg.parentEmail,
       student_name: reg.studentName,
       student_age: reg.studentAge,

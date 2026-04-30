@@ -6,6 +6,7 @@ import { getAvailability, addRegistration, getCurrentUserFromStorage } from '../
 
 const initialForm = {
   parentName: '',
+  parentPhone: '',
   parentEmail: '',
   studentName: '',
   studentAge: '',
@@ -44,7 +45,7 @@ function Register({ currentUser, onAuthChange }) {
 
   const canSubmit = useMemo(() => {
     return (
-      form.parentName && form.parentEmail && form.studentName &&
+      form.parentName && form.parentPhone && form.parentEmail && form.studentName &&
       form.studentAge && form.studentLeerjaar && form.studentStudierichting &&
       selectedSlots.length > 0
     );
@@ -149,6 +150,17 @@ function Register({ currentUser, onAuthChange }) {
               onChange={handleChange}
               placeholder="jan@voorbeeld.nl"
               required 
+            />
+          </label>
+          <label>
+            <span>Telefoon ouder/voogd *</span>
+            <input
+              type="tel"
+              name="parentPhone"
+              value={form.parentPhone}
+              onChange={handleChange}
+              placeholder="+32 …"
+              required
             />
           </label>
           <label>
