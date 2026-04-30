@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import '../styles/Approve.css';
 import { getCurrentUserFromStorage, getRegistrations, updateRegistrationStatus } from '../services/storage';
+import { formatSlotsDisplay } from '../utils/slots';
 
 function Approve({ currentUser, onAuthChange }) {
   const [regs, setRegs] = useState([]);
@@ -49,7 +50,7 @@ function Approve({ currentUser, onAuthChange }) {
                   Ouder: {r.parentName} ({r.parentEmail}, {r.parentPhone})
                 </div>
                 <div className="Approve__slots">
-                  Slots: {r.slots.join(', ')}
+                  Slots: {formatSlotsDisplay(r.slots)}
                 </div>
               </div>
               <div className="Approve__actions">

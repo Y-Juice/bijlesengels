@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import '../styles/MyRequests.css';
 import { getCurrentUserFromStorage, getUserRegistrations, deleteRegistration } from '../services/storage';
+import { formatSlotsDisplay } from '../utils/slots';
 
 function MyRequests() {
   const [list, setList] = useState([]);
@@ -46,7 +47,7 @@ function MyRequests() {
               <div className="ReqInfo">
                 <strong>{r.studentName}</strong> — {r.studentLeerjaar} — {r.studentStudierichting}
                 <div className="ReqMeta">Status: {r.status}</div>
-                <div className="ReqSlots">Slots: {r.slots.join(', ')}</div>
+                <div className="ReqSlots">Slots: {formatSlotsDisplay(r.slots)}</div>
               </div>
               <div className="ReqActions">
                 <button className="btn" onClick={() => cancel(r.id)}>Annuleer</button>

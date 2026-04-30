@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
+import { filterLegacySlotsForAvailability } from '../utils/slots';
 
 const USERS_KEY = 'be_users';
 const SESSION_KEY = 'be_session';
@@ -289,26 +290,29 @@ export async function setAvailability(av) {
 }
 
 export async function occupySlots(slots) {
+  const legacy = filterLegacySlotsForAvailability(slots);
   if (!useSupabase) {
     const av = read(AVAILABILITY_KEY, {});
-    slots.forEach((id) => { av[id] = 'occupied'; });
+    legacy.forEach((id) => { av[id] = 'occupied'; });
     write(AVAILABILITY_KEY, av);
     return;
   }
-  const rows = slots.map((slot) => ({ slot, status: 'occupied' }));
+  if (legacy.length === 0) return;
+  const rows = legacy.map((slot) => ({ slot, status: 'occupied' }));
   const { error } = await supabase.from('availability').upsert(rows, { onConflict: 'slot' });
   if (error) console.error('Supabase occupySlots error', error);
 }
 
 export async function freeSlots(slots) {
+  const legacy = filterLegacySlotsForAvailability(slots);
   if (!useSupabase) {
     const av = read(AVAILABILITY_KEY, {});
-    slots.forEach((id) => { if (av[id] === 'occupied') av[id] = 'available'; });
+    legacy.forEach((id) => { if (av[id] === 'occupied') av[id] = 'available'; });
     write(AVAILABILITY_KEY, av);
     return;
   }
-  // fetch current and update those that are occupied -> available
-  const { data, error } = await supabase.from('availability').select('*').in('slot', slots);
+  if (legacy.length === 0) return;
+  const { data, error } = await supabase.from('availability').select('*').in('slot', legacy);
   if (error) { console.error('Supabase freeSlots select error', error); return; }
   const updates = (data || []).map((r) => ({ slot: r.slot, status: r.status === 'occupied' ? 'available' : r.status }));
   if (updates.length > 0) {

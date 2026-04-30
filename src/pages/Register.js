@@ -2,7 +2,22 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { FiCheckCircle, FiLock, FiCalendar, FiInfo, FiCheck, FiEdit3 } from 'react-icons/fi';
 import '../styles/Register.css';
 import Calendar from '../shared/Calendar';
-import { getAvailability, addRegistration, getCurrentUserFromStorage } from '../services/storage';
+import { getAvailability, addRegistration, getCurrentUserFromStorage, getRegistrations } from '../services/storage';
+import {
+  bookingSelectionsToStoredSlots,
+  parseInstanceKey,
+  REPEAT_NONE,
+  REPEAT_WEEKLY,
+  REPEAT_BIWEEKLY,
+  REPEAT_MONTHLY,
+} from '../utils/slots';
+
+const REPEAT_OPTIONS = [
+  { value: REPEAT_NONE, label: 'Alleen deze datum' },
+  { value: REPEAT_WEEKLY, label: 'Elke week' },
+  { value: REPEAT_BIWEEKLY, label: 'Om de twee weken' },
+  { value: REPEAT_MONTHLY, label: 'Elke maand (zelfde dag)' },
+];
 
 const initialForm = {
   parentName: '',
@@ -17,16 +32,33 @@ const initialForm = {
 
 function Register({ currentUser, onAuthChange }) {
   const [form, setForm] = useState(initialForm);
-  const [selectedSlots, setSelectedSlots] = useState([]);
+  const [selectedSlotKeys, setSelectedSlotKeys] = useState([]);
+  const [repeatByKey, setRepeatByKey] = useState({});
   const [availability, setAvailability] = useState({});
+  const [allRegs, setAllRegs] = useState([]);
   const [sent, setSent] = useState(false);
 
   useEffect(() => {
     async function load() {
       setAvailability(await getAvailability());
+      setAllRegs(await getRegistrations());
     }
     load();
   }, []);
+
+  const onBookingKeysChange = (keys) => {
+    setSelectedSlotKeys(keys);
+    setRepeatByKey((prev) => {
+      const next = { ...prev };
+      keys.forEach((k) => {
+        if (!(k in next)) next[k] = REPEAT_NONE;
+      });
+      Object.keys(next).forEach((k) => {
+        if (!keys.includes(k)) delete next[k];
+      });
+      return next;
+    });
+  };
 
   // Check and sync user state
   useEffect(() => {
@@ -47,9 +79,9 @@ function Register({ currentUser, onAuthChange }) {
     return (
       form.parentName && form.parentPhone && form.parentEmail && form.studentName &&
       form.studentAge && form.studentLeerjaar && form.studentStudierichting &&
-      selectedSlots.length > 0
+      selectedSlotKeys.length > 0
     );
-  }, [form, selectedSlots]);
+  }, [form, selectedSlotKeys]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -79,7 +111,7 @@ function Register({ currentUser, onAuthChange }) {
     await addRegistration({
       ...form,
       userId: user.id,
-      slots: selectedSlots,
+      slots: bookingSelectionsToStoredSlots(selectedSlotKeys, repeatByKey),
       status: 'pending',
       createdAt: Date.now()
     });
@@ -232,11 +264,12 @@ function Register({ currentUser, onAuthChange }) {
             <FiInfo className="hint__icon" aria-hidden="true" />
             <span>
               <strong>Tip:</strong> Hieronder zie je alleen de tijdstippen die de host
-              als beschikbaar heeft ingesteld. Klik om een uur te kiezen.
-              Je kunt meerdere uren selecteren, maar maximaal 2 per dag.
+              als beschikbaar heeft ingesteld. Elk gekozen uur geldt voor die kalenderdatum,
+              tenzij je hieronder een terugkerend patroon kiest.
+              Maximaal 2 tijdstippen per kalenderdag.
             </span>
           </p>
-          {selectedSlots.length > 0 && (
+          {selectedSlotKeys.length > 0 && (
             <div style={{
               background: 'rgba(16,185,129,0.1)',
               padding: '12px 16px',
@@ -245,16 +278,50 @@ function Register({ currentUser, onAuthChange }) {
               border: '2px solid rgba(16,185,129,0.3)'
             }}>
               <FiCheck aria-hidden="true" style={{marginRight: '8px', verticalAlign: '-2px'}} />
-              <strong>{selectedSlots.length} tijdstip{selectedSlots.length !== 1 ? 'pen' : ''} geselecteerd</strong>
+              <strong>{selectedSlotKeys.length} tijdstip{selectedSlotKeys.length !== 1 ? 'pen' : ''} geselecteerd</strong>
             </div>
           )}
           <Calendar
             availability={availability}
-            selectedSlots={selectedSlots}
-            onChangeSelected={setSelectedSlots}
+            registrations={allRegs}
+            selectedSlots={selectedSlotKeys}
+            onChangeSelected={onBookingKeysChange}
             readOnly={false}
             onlyAvailable
+            bookingPickMode
           />
+          {selectedSlotKeys.length > 0 && (
+            <div className="BookingRepeatList">
+              <h4 className="BookingRepeatList__title">Herhaling per tijdstip</h4>
+              <p className="hint BookingRepeatList__hint">
+                Standaard telt elk gekozen uur alleen voor die datum.
+                Je kunt per tijdstip kiezen voor wekelijks, om de twee weken of maandelijks (zelfde kalenderdag).
+              </p>
+              <ul className="BookingRepeatList__items">
+                {selectedSlotKeys.map((k) => {
+                  const { dateStr, hour } = parseInstanceKey(k);
+                  return (
+                    <li key={k} className="BookingRepeatList__item">
+                      <span className="BookingRepeatList__when">
+                        {dateStr} om {String(hour).padStart(2, '0')}:00
+                      </span>
+                      <select
+                        className="BookingRepeatList__select"
+                        value={repeatByKey[k] || REPEAT_NONE}
+                        onChange={(e) =>
+                          setRepeatByKey((prev) => ({ ...prev, [k]: e.target.value }))
+                        }
+                      >
+                        {REPEAT_OPTIONS.map((o) => (
+                          <option key={o.value} value={o.value}>{o.label}</option>
+                        ))}
+                      </select>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          )}
         </div>
       </form>
       </div>
@@ -262,6 +329,7 @@ function Register({ currentUser, onAuthChange }) {
       {/* Sticky register button */}
       <div className="Register__stickyButton">
         <button 
+          type="button"
           className="btn btn-primary Register__submitBtn" 
           disabled={!canSubmit} 
           onClick={handleRegister}
