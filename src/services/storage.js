@@ -66,11 +66,12 @@ export async function getCurrentUserFromStorage() {
   // if supabase available, return merged profile
   if (useSupabase) {
     try {
-      const { data: sessionData, error: sessErr } = await supabase.auth.getSession();
-      if (sessErr || !sessionData?.data?.session) {
+      const { data: sessionPayload, error: sessErr } = await supabase.auth.getSession();
+      const session = sessionPayload?.session;
+      if (sessErr || !session) {
         return null;
       }
-      const user = sessionData.data.session.user;
+      const user = session.user;
       const { profile, error: pErr } = await getProfileForAuthUser(user);
       if (pErr) {
         console.error('getCurrentUserFromStorage profile error', pErr);

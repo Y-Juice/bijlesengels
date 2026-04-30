@@ -115,6 +115,7 @@ function Calendar({
                   if (hover === id) classes.push('hover');
                   return (
                     <button
+                      type="button"
                       key={`${dateStr}-${h}`}
                       className={classes.join(' ')}
                       onClick={() => handleClick(id, dateStr)}
@@ -157,7 +158,7 @@ function Calendar({
               </div>
             ))}
             <div className="Calendar__modalActions">
-              <button className="btn" onClick={() => setModalRegs(null)}>Sluiten</button>
+              <button type="button" className="btn" onClick={() => setModalRegs(null)}>Sluiten</button>
             </div>
           </div>
         </div>
