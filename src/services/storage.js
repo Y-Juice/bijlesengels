@@ -351,16 +351,22 @@ export async function getRegistrations() {
   }
 }
 
+function newRegistrationId() {
+  // random suffix so two registrations made in the same millisecond
+  // (e.g. one per child) never get the same id
+  return `r_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+}
+
 export async function addRegistration(reg) {
   if (!useSupabase) {
     const regs = read('be_registrations', []);
-    const withId = { ...reg, id: `r_${Date.now()}` };
+    const withId = { ...reg, id: newRegistrationId() };
     regs.push(withId);
     write('be_registrations', regs);
     return withId.id;
   }
   try {
-    const id = `r_${Date.now()}`;
+    const id = newRegistrationId();
     // Map JavaScript camelCase to database snake_case
     const payload = {
       id,
@@ -394,9 +400,11 @@ export async function updateRegistrationStatus(id, status) {
     const regs = read('be_registrations', []);
     const idx = regs.findIndex((r) => r.id === id);
     if (idx >= 0) {
+      const prevStatus = regs[idx].status;
       regs[idx].status = status;
       write('be_registrations', regs);
       if (status === 'approved') await occupySlots(regs[idx].slots || []);
+      else if (prevStatus === 'approved') await freeSlots(regs[idx].slots || []);
     }
     return;
   }
@@ -412,9 +420,11 @@ export async function updateRegistrationStatus(id, status) {
       console.error('Supabase updateRegistrationStatus update error', err2); 
       return;
     }
+    const slots = Array.isArray(data.slots) ? data.slots : (typeof data.slots === 'string' ? JSON.parse(data.slots) : []);
     if (status === 'approved') {
-      const slots = Array.isArray(data.slots) ? data.slots : (typeof data.slots === 'string' ? JSON.parse(data.slots) : []);
       await occupySlots(slots);
+    } else if (data.status === 'approved') {
+      await freeSlots(slots);
     }
   } catch (e) {
     console.error('updateRegistrationStatus exception', e);

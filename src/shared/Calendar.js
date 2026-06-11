@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import '../styles/Calendar.css';
-import { instanceKey, registrationBlocksCell, formatSlotsDisplay, templateSlotKeyForDateHour } from '../utils/slots';
+import { instanceKey, registrationBlocksCell, formatSlotsDisplay, formatHour, templateSlotKeyForDateHour } from '../utils/slots';
 
 const DAYS = ['Ma', 'Di', 'Wo', 'Do', 'Vr', 'Za', 'Zo'];
 const HOURS = Array.from({ length: 10 }).map((_, i) => 9 + i); // 09:00 - 18:00
@@ -97,7 +97,7 @@ function Calendar({
       : regsAtCellClassic(tmplId);
 
     if (modalRegsList.length > 0) {
-      setModalRegs({ id: cellId, regs: modalRegsList, date: dateStr });
+      setModalRegs({ id: cellId, regs: modalRegsList, date: dateStr, hour: hourNum });
       return;
     }
 
@@ -209,7 +209,7 @@ function Calendar({
       {modalRegs && (
         <div className="Calendar__modalOverlay" onClick={() => setModalRegs(null)}>
           <div className="Calendar__modal" onClick={(e) => e.stopPropagation()}>
-            <h3>Reserveringen voor {modalRegs.date} ({modalRegs.id})</h3>
+            <h3>Reserveringen voor {modalRegs.date} om {formatHour(modalRegs.hour)}</h3>
             {modalRegs.regs.map((r) => (
               <div key={r.id} className="Calendar__reg">
                 <div><strong>Inschrijving:</strong> {r.id}</div>

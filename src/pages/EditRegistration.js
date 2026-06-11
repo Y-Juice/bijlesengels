@@ -40,6 +40,7 @@ function EditRegistration() {
   const [repeatByKey, setRepeatByKey] = useState({});
   const [allRegs, setAllRegs] = useState([]);
   const [saved, setSaved] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     async function load() {
@@ -48,13 +49,16 @@ function EditRegistration() {
         window.location.hash = '#/home';
         return;
       }
+      const admin = user.role === 'admin';
+      setIsAdmin(admin);
       setAvailability(await getAvailability());
       const regs = await getRegistrations();
       setAllRegs(regs);
       const id = parseId();
-      const found = (regs || []).find((r) => r.id === id && r.userId === user.id);
+      // admin may edit any registration, a parent only their own
+      const found = (regs || []).find((r) => r.id === id && (admin || r.userId === user.id));
       if (!found) {
-        window.location.hash = '#/my-requests';
+        window.location.hash = admin ? '#/approve' : '#/my-requests';
         return;
       }
       setReg(found);
@@ -129,10 +133,12 @@ function EditRegistration() {
           />
           <h2>Inschrijving bijgewerkt!</h2>
           <p style={{ marginTop: '12px', marginBottom: '24px', fontSize: '16px' }}>
-            Je wijzigingen zijn opgeslagen en worden opnieuw beoordeeld door de admin.
+            {isAdmin
+              ? 'De wijzigingen zijn opgeslagen. De inschrijving staat opnieuw op "in afwachting".'
+              : 'Je wijzigingen zijn opgeslagen en worden opnieuw beoordeeld door de admin.'}
           </p>
-          <a className="btn btn-primary" href="#/my-requests">
-            Terug naar mijn inschrijvingen
+          <a className="btn btn-primary" href={isAdmin ? '#/approve' : '#/my-requests'}>
+            {isAdmin ? 'Terug naar reserveringen' : 'Terug naar mijn inschrijvingen'}
           </a>
         </div>
       </div>
@@ -241,7 +247,7 @@ function EditRegistration() {
           )}
         </div>
         <div className="Form__actions">
-          <button className="btn" type="button" onClick={() => (window.location.hash = '#/my-requests')}>
+          <button className="btn" type="button" onClick={() => (window.location.hash = isAdmin ? '#/approve' : '#/my-requests')}>
             Annuleren
           </button>
           <button className="btn btn-primary" disabled={!canSubmit} type="submit">

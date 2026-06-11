@@ -104,10 +104,23 @@ export function filterLegacySlotsForAvailability(slots) {
   return (slots || []).filter((s) => typeof s === 'string' && isLegacyTemplateSlot(s));
 }
 
+const WEEKDAY_NAMES = ['maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag', 'zondag'];
+
+export function formatHour(hour) {
+  return `${String(hour).padStart(2, '0')}:00`;
+}
+
 export function formatSlotEntry(entry) {
-  if (typeof entry === 'string') return entry;
+  if (typeof entry === 'string') {
+    if (isLegacyTemplateSlot(entry)) {
+      const [wd, hh] = entry.split('-').map(Number);
+      const dayName = WEEKDAY_NAMES[wd];
+      return dayName ? `elke ${dayName} om ${formatHour(hh)}` : formatHour(hh);
+    }
+    return entry;
+  }
   if (!entry || entry.date == null || entry.hour == null) return '';
-  const tim = `${String(entry.hour).padStart(2, '0')}:00`;
+  const tim = formatHour(entry.hour);
   const base = `${entry.date} ${tim}`;
   const rep = normalizeRepeat(entry.repeat);
   if (rep === REPEAT_NONE) return `${base} (eenmalig)`;

@@ -40,7 +40,7 @@ function MobileNav({ currentUser, onAuthChange }) {
             </a>
             <a href="#/approve" className="MobileNav__link">
               <FiInbox aria-hidden="true" />
-              <span>Aanvragen</span>
+              <span>Reserveringen</span>
             </a>
           </>
         )}

@@ -167,6 +167,44 @@
   }
 }
 
+.ExtraKids {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 2px dashed var(--color-border);
+}
+
+.ExtraKids__title {
+  font-size: 1.25rem;
+  margin-bottom: 12px;
+  color: var(--color-palm);
+  font-family: var(--font-display);
+}
+
+.ExtraKids__kid {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.ExtraKids__kidHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.ExtraKids__kidHeader strong {
+  color: var(--color-palm);
+  font-size: 1.05rem;
+}
+
+.ExtraKids__removeBtn {
+  color: #b91c1c;
+  border-color: rgba(239, 68, 68, 0.5);
+}
+
 .BookingRepeatList {
   margin-top: 24px;
   padding-top: 20px;

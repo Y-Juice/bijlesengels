@@ -31,7 +31,7 @@ function Header({ currentUser, onAuthChange }) {
         {currentUser && currentUser.role === 'admin' && (
           <>
             <a href="#/admin" className="Header__link">Beschikbaarheden</a>
-            <a href="#/approve" className="Header__link">Aanvragen</a>
+            <a href="#/approve" className="Header__link">Reserveringen</a>
           </>
         )}
       </nav>
